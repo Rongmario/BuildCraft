@@ -61,9 +61,9 @@ public class BCTransportRecipes {
         addPipeRecipe(BCTransportItems.pipeItemDiamond, Items.DIAMOND);
         addPipeRecipe(BCTransportItems.pipeItemLapis, Blocks.LAPIS_BLOCK);
         addPipeRecipe(BCTransportItems.pipeItemDaizuli, Blocks.LAPIS_BLOCK, Items.DIAMOND);
-        addPipeRecipe(BCTransportItems.pipeItemDiaWood, "plankWood", Items.DIAMOND);
+        addPipeRecipe(BCTransportItems.pipeItemEmerald, Items.EMERALD, Items.EMERALD);
         addPipeRecipe(BCTransportItems.pipeItemStripes, "gearGold");
-        addPipeUpgradeRecipe(BCTransportItems.pipeItemDiaWood, BCTransportItems.pipeItemEmzuli, Blocks.LAPIS_BLOCK);
+        addPipeUpgradeRecipe(BCTransportItems.pipeItemEmerald, BCTransportItems.pipeItemEmzuli, Blocks.LAPIS_BLOCK);
 
         Item waterproof = BCTransportItems.waterproof;
         if (waterproof == null) {
@@ -80,7 +80,7 @@ public class BCTransportRecipes {
         addPipeUpgradeRecipe(BCTransportItems.pipeItemVoid, BCTransportItems.pipeFluidVoid, waterproof);
         addPipeUpgradeRecipe(BCTransportItems.pipeItemObsidian, BCTransportItems.pipeFluidObsidian, waterproof);
         addPipeUpgradeRecipe(BCTransportItems.pipeItemDiamond, BCTransportItems.pipeFluidDiamond, waterproof);
-        addPipeUpgradeRecipe(BCTransportItems.pipeItemDiaWood, BCTransportItems.pipeFluidDiaWood, waterproof);
+        addPipeUpgradeRecipe(BCTransportItems.pipeItemEmerald, BCTransportItems.pipeFluidEmerald, waterproof);
 
         String upgrade = "dustRedstone";
         addPipeUpgradeRecipe(BCTransportItems.pipeItemWood, BCTransportItems.pipePowerWood, upgrade);

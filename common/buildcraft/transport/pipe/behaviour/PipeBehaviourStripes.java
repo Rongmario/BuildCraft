@@ -22,6 +22,7 @@ import net.minecraft.world.WorldServer;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -138,6 +139,12 @@ public class PipeBehaviourStripes extends PipeBehaviour implements IStripesActiv
     @Override
     public long receivePower(long microJoules, boolean simulate) {
         return battery.addPowerChecking(microJoules, simulate);
+    }
+
+    private final PipeRFWrapper wrapper = new PipeRFWrapper(this);
+    @Override
+    public IEnergyStorage getRF() {
+        return wrapper;
     }
 
     // Stripes

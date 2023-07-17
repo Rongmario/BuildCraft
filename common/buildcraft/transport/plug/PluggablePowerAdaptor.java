@@ -18,6 +18,7 @@ import buildcraft.api.transport.pluggable.PluggableModelKey;
 
 import buildcraft.transport.BCTransportItems;
 import buildcraft.transport.client.model.key.KeyPlugPowerAdaptor;
+import net.minecraftforge.energy.CapabilityEnergy;
 
 public class PluggablePowerAdaptor extends PipePluggable {
 
@@ -70,6 +71,11 @@ public class PluggablePowerAdaptor extends PipePluggable {
 
     @Override
     public <T> T getCapability(@Nonnull Capability<T> cap) {
+        if (cap == CapabilityEnergy.ENERGY) {
+            try {
+                return (T) holder.getPipe().getBehaviour().getRF();
+            } catch(Exception ignored) {}
+        }
         if (cap == MjAPI.CAP_CONNECTOR || cap == MjAPI.CAP_RECEIVER || cap == MjAPI.CAP_REDSTONE_RECEIVER) {
             return holder.getPipe().getBehaviour().getCapability(cap, side);
         }

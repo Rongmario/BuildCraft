@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import buildcraft.energy.BCRfWrapper;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTUtil;
 import net.minecraft.util.EnumFacing;
@@ -18,6 +19,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -54,10 +57,24 @@ public abstract class TileMiner extends TileBC_Neptune implements ITickable, IDe
 
     protected boolean isComplete = false;
     protected final MjBattery battery = new MjBattery(getBatteryCapacity());
+    private final BCRfWrapper wrapper = new BCRfWrapper(battery);
 
     public TileMiner() {
         caps.addProvider(new MjCapabilityHelper(createMjReceiver()));
         caps.addCapabilityInstance(TilesAPI.CAP_HAS_WORK, () -> !isComplete, EnumPipePart.VALUES);
+    }
+
+    @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+        return getCapability(capability, facing) != null;
+    }
+
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY) {
+            return CapabilityEnergy.ENERGY.cast(wrapper);
+        }
+        return super.getCapability(capability, facing);
     }
 
     protected abstract void mine();
@@ -228,7 +245,7 @@ public abstract class TileMiner extends TileBC_Neptune implements ITickable, IDe
         left.add("currentLength = " + currentLength);
         left.add("lastLength = " + lastLength);
         left.add("isComplete = " + isComplete());
-        left.add("progress = " + LocaleUtil.localizeMj(progress));
+        left.add("progress = " + LocaleUtil.localizeRf(progress));
     }
 
     @Nonnull

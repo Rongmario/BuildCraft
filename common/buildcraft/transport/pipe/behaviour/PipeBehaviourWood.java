@@ -15,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 
 import buildcraft.api.mj.IMjConnector;
@@ -41,7 +42,11 @@ public class PipeBehaviourWood extends PipeBehaviourDirectional implements IMjRe
     private static final PipeFaceTex TEX_FILLED = PipeFaceTex.get(1);
 
     private final MjCapabilityHelper mjCaps = new MjCapabilityHelper(this);
-
+    private final PipeRFWrapper wrapper = new PipeRFWrapper(this);
+    @Override
+    public IEnergyStorage getRF() {
+        return wrapper;
+    }
     public PipeBehaviourWood(IPipe pipe) {
         super(pipe);
     }
@@ -77,6 +82,7 @@ public class PipeBehaviourWood extends PipeBehaviourDirectional implements IMjRe
             if (pipe.getFlow() instanceof IFlowItems) {
                 IFlowItems flow = (IFlowItems) pipe.getFlow();
                 int maxItems = (int) (power / BCTransportConfig.mjPerItem);
+                if (maxItems > 16) maxItems = 16;
                 if (maxItems > 0) {
                     int extracted = extractItems(flow, getCurrentDir(), maxItems, simulate);
                     if (extracted > 0) {
@@ -86,6 +92,7 @@ public class PipeBehaviourWood extends PipeBehaviourDirectional implements IMjRe
             } else if (pipe.getFlow() instanceof IFlowFluid) {
                 IFlowFluid flow = (IFlowFluid) pipe.getFlow();
                 int maxMillibuckets = (int) (power / BCTransportConfig.mjPerMillibucket);
+                if (maxMillibuckets > max()) maxMillibuckets = max();
                 if (maxMillibuckets > 0) {
                     FluidStack extracted = extractFluid(flow, getCurrentDir(), maxMillibuckets, simulate);
                     if (extracted != null && extracted.amount > 0) {
@@ -95,6 +102,10 @@ public class PipeBehaviourWood extends PipeBehaviourDirectional implements IMjRe
             }
         }
         return power;
+    }
+
+    private int max() {
+        return 10;
     }
 
     protected int extractItems(IFlowItems flow, EnumFacing dir, int count, boolean simulate) {

@@ -199,4 +199,5 @@ public class TileEngineStone_BC8 extends TileEngineBase_BC8 {
         left.add("burnTime = " + burnTime);
         left.add("delta = " + deltaFuelLeft.getDynamic(0));
     }
+
 }

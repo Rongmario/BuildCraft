@@ -33,11 +33,11 @@ public class LedgerTablePower extends Ledger_Neptune {
         title = "gui.power";
 
         appendText(LocaleUtil.localize("gui.assemblyCurrentRequired") + ":", SUB_HEADER_COLOUR).setDropShadow(true);
-        appendText(() -> LocaleUtil.localizeMj(tile.getTarget()), TEXT_COLOUR);
+        appendText(() -> LocaleUtil.localizeRf(tile.getTarget()), TEXT_COLOUR);
         appendText(LocaleUtil.localize("gui.stored") + ":", SUB_HEADER_COLOUR).setDropShadow(true);
-        appendText(() -> LocaleUtil.localizeMj(tile.power), TEXT_COLOUR);
+        appendText(() -> LocaleUtil.localizeRf(tile.power), TEXT_COLOUR);
         appendText(LocaleUtil.localize("gui.assemblyRate") + ":", SUB_HEADER_COLOUR).setDropShadow(true);
-        appendText(() -> LocaleUtil.localizeMjFlow(tile.avgPowerClient), TEXT_COLOUR);
+        appendText(() -> LocaleUtil.localizeRfFlow(tile.avgPowerClient), TEXT_COLOUR);
         calculateMaxSize();
 
         setOpenProperty(GuiConfigManager.getOrAddBoolean(new ResourceLocation("buildcraftsilicon:all_tables"), "ledger.power.is_open", false));

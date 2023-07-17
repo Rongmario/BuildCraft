@@ -46,9 +46,9 @@ public class GuideGroupManager {
         addEntries("buildcraft", "pipe_power_providers", BCItems.Silicon.PLUG_PULSAR,
             BCItems.Transport.PLUG_POWER_ADAPTOR, new ItemStack(BCBlocks.Core.ENGINE),
             new ItemStack(BCBlocks.Core.ENGINE, 1, 1), new ItemStack(BCBlocks.Core.ENGINE, 1, 2))//
-                .addKeyArray(BCItems.Transport.PIPE_WOOD_ITEM, BCItems.Transport.PIPE_DIAMOND_WOOD_ITEM,
+                .addKeyArray(BCItems.Transport.PIPE_WOOD_ITEM, BCItems.Transport.PIPE_EMERALD_ITEM,
                     BCItems.Transport.PIPE_EMZULI_ITEM, BCItems.Transport.PIPE_WOOD_FLUID,
-                    BCItems.Transport.PIPE_DIAMOND_WOOD_FLUID);
+                    BCItems.Transport.PIPE_EMERALD_FLUID);
         addEntries("buildcraft", "full_power_providers", new ItemStack(BCBlocks.Core.ENGINE, 1, 1),
             new ItemStack(BCBlocks.Core.ENGINE, 1, 2)).addKeyArray(BCBlocks.Builders.BUILDER, BCBlocks.Builders.FILLER,
                 BCBlocks.Builders.QUARRY, BCBlocks.Factory.DISTILLER, BCBlocks.Factory.MINING_WELL,

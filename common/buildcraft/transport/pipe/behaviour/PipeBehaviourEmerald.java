@@ -42,7 +42,7 @@ import buildcraft.lib.tile.item.ItemHandlerSimple;
 
 import buildcraft.transport.BCTransportGuis;
 
-public class PipeBehaviourWoodDiamond extends PipeBehaviourWood {
+public class PipeBehaviourEmerald extends PipeBehaviourWood {
 
     public enum FilterMode {
         WHITE_LIST,
@@ -67,11 +67,11 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood {
     public int currentFilter = 0;
     public boolean filterValid = false;
 
-    public PipeBehaviourWoodDiamond(IPipe pipe) {
+    public PipeBehaviourEmerald(IPipe pipe) {
         super(pipe);
     }
 
-    public PipeBehaviourWoodDiamond(IPipe pipe, NBTTagCompound nbt) {
+    public PipeBehaviourEmerald(IPipe pipe, NBTTagCompound nbt) {
         super(pipe, nbt);
         filters.deserializeNBT(nbt.getCompoundTag("filters"));
         filterMode = FilterMode.get(nbt.getByte("mode"));
@@ -121,7 +121,7 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood {
             }
         }
         if (!player.world.isRemote) {
-            BCTransportGuis.PIPE_DIAMOND_WOOD.openGui(player, pipe.getHolder().getPipePos());
+            BCTransportGuis.PIPE_EMERALD.openGui(player, pipe.getHolder().getPipePos());
         }
         return true;
     }
@@ -167,7 +167,9 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood {
         }
         return extracted;
     }
-
+    private int max() {
+        return 80;
+    }
     @Override
     protected FluidStack extractFluid(IFlowFluid flow, EnumFacing dir, int millibuckets, boolean simulate) {
         if (filters.getStackInSlot(currentFilter).isEmpty()) {
@@ -187,7 +189,7 @@ public class PipeBehaviourWoodDiamond extends PipeBehaviourWood {
                     return extracted;
                 }
 
-                if (extracted == null || extracted.amount <= 0) {
+                if (extracted.amount <= 0) {
                     for (int i = 0; i < filters.getSlots(); i++) {
                         ItemStack stack = filters.getStackInSlot(i);
                         if (stack.isEmpty()) {

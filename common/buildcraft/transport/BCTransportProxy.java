@@ -27,17 +27,17 @@ import buildcraft.lib.net.MessageManager;
 import buildcraft.transport.client.PipeRegistryClient;
 import buildcraft.transport.client.render.PipeWireRenderer;
 import buildcraft.transport.container.ContainerDiamondPipe;
-import buildcraft.transport.container.ContainerDiamondWoodPipe;
+import buildcraft.transport.container.ContainerEmeraldPipe;
 import buildcraft.transport.container.ContainerEmzuliPipe_BC8;
 import buildcraft.transport.container.ContainerFilteredBuffer_BC8;
 import buildcraft.transport.gui.GuiDiamondPipe;
-import buildcraft.transport.gui.GuiDiamondWoodPipe;
+import buildcraft.transport.gui.GuiEmeraldPipe;
 import buildcraft.transport.gui.GuiEmzuliPipe_BC8;
 import buildcraft.transport.gui.GuiFilteredBuffer;
 import buildcraft.transport.net.MessageMultiPipeItem;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourDiamond;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourEmzuli;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourWoodDiamond;
+import buildcraft.transport.pipe.behaviour.PipeBehaviourEmerald;
 import buildcraft.transport.tile.TileFilteredBuffer;
 import buildcraft.transport.wire.MessageWireSystems;
 import buildcraft.transport.wire.MessageWireSystemsPowered;
@@ -77,15 +77,15 @@ public abstract class BCTransportProxy implements IGuiHandler {
                 }
                 break;
             }
-            case PIPE_DIAMOND_WOOD: {
+            case PIPE_EMERALD: {
                 if (tile instanceof IPipeHolder) {
                     IPipeHolder holder = (IPipeHolder) tile;
                     IPipe pipe = holder.getPipe();
                     if (pipe == null) return null;
                     PipeBehaviour behaviour = pipe.getBehaviour();
-                    if (behaviour instanceof PipeBehaviourWoodDiamond) {
-                        PipeBehaviourWoodDiamond diaPipe = (PipeBehaviourWoodDiamond) behaviour;
-                        return new ContainerDiamondWoodPipe(player, diaPipe);
+                    if (behaviour instanceof PipeBehaviourEmerald) {
+                        PipeBehaviourEmerald diaPipe = (PipeBehaviourEmerald) behaviour;
+                        return new ContainerEmeraldPipe(player, diaPipe);
                     }
                 }
                 break;
@@ -182,15 +182,15 @@ public abstract class BCTransportProxy implements IGuiHandler {
                     }
                     break;
                 }
-                case PIPE_DIAMOND_WOOD: {
+                case PIPE_EMERALD: {
                     if (tile instanceof IPipeHolder) {
                         IPipeHolder holder = (IPipeHolder) tile;
                         IPipe pipe = holder.getPipe();
                         if (pipe == null) return null;
                         PipeBehaviour behaviour = pipe.getBehaviour();
-                        if (behaviour instanceof PipeBehaviourWoodDiamond) {
-                            PipeBehaviourWoodDiamond diaPipe = (PipeBehaviourWoodDiamond) behaviour;
-                            return new GuiDiamondWoodPipe(player, diaPipe);
+                        if (behaviour instanceof PipeBehaviourEmerald) {
+                            PipeBehaviourEmerald diaPipe = (PipeBehaviourEmerald) behaviour;
+                            return new GuiEmeraldPipe(player, diaPipe);
                         }
                     }
                     break;

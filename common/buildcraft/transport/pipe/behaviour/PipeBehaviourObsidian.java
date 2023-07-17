@@ -38,6 +38,7 @@ import buildcraft.lib.inventory.ItemTransactorHelper;
 import buildcraft.lib.inventory.filter.StackFilter;
 import buildcraft.lib.misc.BoundingBoxUtil;
 import buildcraft.lib.misc.VecUtil;
+import net.minecraftforge.energy.IEnergyStorage;
 
 public class PipeBehaviourObsidian extends PipeBehaviour implements IMjRedstoneReceiver {
     private static final long POWER_PER_ITEM = MjAPI.MJ / 2;
@@ -45,6 +46,11 @@ public class PipeBehaviourObsidian extends PipeBehaviour implements IMjRedstoneR
 
     private static final double INSERT_SPEED = 0.04;
     private static final int DROP_GAP = 20;
+    private final PipeRFWrapper wrapper = new PipeRFWrapper(this);
+    @Override
+    public IEnergyStorage getRF() {
+        return wrapper;
+    }
 
     private final MjCapabilityHelper mjCaps = new MjCapabilityHelper(this);
     /** Map of recently dropped item to the tick when it can be picked up */

@@ -86,7 +86,7 @@ public class GuideAssembly extends GuidePartItem {
             drawItemStack(output.get(), x + (int) OUT_POSITION.x, y + (int) OUT_POSITION.y);
 
             if (MJ_POSITION.offset(x, y).contains(gui.mouse)) {
-                gui.tooltips.add(Collections.singletonList(LocaleUtil.localizeMj(mjCost.get())));
+                gui.tooltips.add(Collections.singletonList(LocaleUtil.localizeRf(mjCost.get())));
             }
 
             RenderHelper.disableStandardItemLighting();

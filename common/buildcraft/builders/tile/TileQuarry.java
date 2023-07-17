@@ -25,6 +25,8 @@ import java.util.stream.Collectors;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import buildcraft.api.mj.RfWrapperReceiver;
+import buildcraft.energy.BCRfWrapper;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.state.IBlockState;
@@ -45,6 +47,8 @@ import net.minecraft.world.IWorldEventListener;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -99,6 +103,7 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
         = new ResourceLocation("buildcraftbuilders:diggy_diggy_hole");
 
     private final MjBattery battery = new MjBattery(24000 * MjAPI.MJ);
+    private final BCRfWrapper wrapper = new BCRfWrapper(battery);
     public final Box frameBox = new Box();
     private final Box miningBox = new Box();
     private BoxIterator boxIterator;
@@ -142,6 +147,21 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
             w.profiler.endSection();
         }
     };
+
+
+    @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+        return getCapability(capability, facing) != null;
+    }
+
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY) {
+            return CapabilityEnergy.ENERGY.cast(wrapper);
+        }
+        return super.getCapability(capability, facing);
+    }
+
 
     public TileQuarry() {
         caps.addProvider(new MjCapabilityHelper(new MjBatteryReceiver(battery)));
@@ -833,7 +853,7 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
     @Override
     public void getDebugInfo(List<String> left, List<String> right, EnumFacing side) {
         left.add("battery = " + battery.getDebugString());
-        left.add("rate = " + LocaleUtil.localizeMjFlow(debugPowerRate));
+        left.add("rate = " + LocaleUtil.localizeRfFlow(debugPowerRate));
         left.add("frameBox");
         left.add(" - min = " + frameBox.min());
         left.add(" - max = " + frameBox.max());
@@ -852,8 +872,8 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
         if (task != null) {
             left.add("task:");
             left.add(" - class = " + task.getClass().getName());
-            left.add(" - power = " + LocaleUtil.localizeMj(task.power));
-            left.add(" - target = " + LocaleUtil.localizeMj(task.getTarget()));
+            left.add(" - power = " + LocaleUtil.localizeRf(task.power));
+            left.add(" - target = " + LocaleUtil.localizeRf(task.getTarget()));
         } else {
             left.add("task = null");
         }

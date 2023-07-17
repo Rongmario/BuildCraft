@@ -107,7 +107,7 @@ public class BCTransportConfig {
             fluidTransfer(BCTransportPipes.quartzFluid, baseFlowRate * 4, 10);
 
             fluidTransfer(BCTransportPipes.diamondFluid, baseFlowRate * 8, 10);
-            fluidTransfer(BCTransportPipes.diaWoodFluid, baseFlowRate * 8, 10);
+            fluidTransfer(BCTransportPipes.emeraldFluid, baseFlowRate * 8, 10);
             fluidTransfer(BCTransportPipes.goldFluid, baseFlowRate * 8, 2);
             fluidTransfer(BCTransportPipes.voidFluid, baseFlowRate * 8, 10);
 

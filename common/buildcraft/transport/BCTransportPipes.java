@@ -37,7 +37,7 @@ import buildcraft.transport.pipe.behaviour.PipeBehaviourStripes;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourStructure;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourVoid;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourWood;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourWoodDiamond;
+import buildcraft.transport.pipe.behaviour.PipeBehaviourEmerald;
 import buildcraft.transport.pipe.behaviour.PipeBehaviourWoodPower;
 
 public class BCTransportPipes {
@@ -75,8 +75,8 @@ public class BCTransportPipes {
     public static PipeDefinition diamondFluid;
     // public static PipeDefinition diamondPower;
 
-    public static PipeDefinition diaWoodItem;
-    public static PipeDefinition diaWoodFluid;
+    public static PipeDefinition emeraldItem;
+    public static PipeDefinition emeraldFluid;
 
     public static PipeDefinition clayItem;
     public static PipeDefinition clayFluid;
@@ -151,9 +151,9 @@ public class BCTransportPipes {
         diamondFluid = builder.idTexPrefix("diamond_fluid").flowFluid().define();
         builder.builder.itemTex(0);
 
-        builder.logic(PipeBehaviourWoodDiamond::new, PipeBehaviourWoodDiamond::new).texSuffixes("_clear", "_filled");
-        diaWoodItem = builder.idTexPrefix("diamond_wood_item").flowItem().define();
-        diaWoodFluid = builder.idTexPrefix("diamond_wood_fluid").flowFluid().define();
+        builder.logic(PipeBehaviourEmerald::new, PipeBehaviourEmerald::new).texSuffixes("_clear", "_filled");
+        emeraldItem = builder.idTexPrefix("emerald_item").flowItem().define();
+        emeraldFluid = builder.idTexPrefix("emerald_fluid").flowFluid().define();
 
         builder.logic(PipeBehaviourClay::new, PipeBehaviourClay::new);
         clayItem = builder.idTex("clay_item").flowItem().define();

@@ -13,6 +13,7 @@ import java.util.Objects;
 
 import javax.annotation.Nonnull;
 
+import buildcraft.energy.BCRfWrapper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -23,6 +24,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -66,11 +69,27 @@ public class TileLaser extends TileBC_Neptune implements ITickable, IDebuggable,
     private final AverageLong avgPower = new AverageLong(100);
     private long averageClient;
     private final MjBattery battery;
+    private final BCRfWrapper wrapper;
 
     public TileLaser() {
         super();
         battery = new MjBattery(1024 * MjAPI.MJ);
+        wrapper = new BCRfWrapper(battery);
         caps.addProvider(new MjCapabilityHelper(new MjBatteryReceiver(battery)));
+    }
+
+
+    @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+        return getCapability(capability, facing) != null;
+    }
+
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY) {
+            return CapabilityEnergy.ENERGY.cast(wrapper);
+        }
+        return super.getCapability(capability, facing);
     }
 
     @Override
@@ -279,7 +298,7 @@ public class TileLaser extends TileBC_Neptune implements ITickable, IDebuggable,
         left.add("battery = " + battery.getDebugString());
         left.add("target = " + targetPos);
         left.add("laser = " + laserPos);
-        left.add("average = " + LocaleUtil.localizeMjFlow(averageClient == 0 ? (long) avgPower.getAverage() : averageClient));
+        left.add("average = " + LocaleUtil.localizeRfFlow(averageClient == 0 ? (long) avgPower.getAverage() : averageClient));
     }
 
     @Override

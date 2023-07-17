@@ -8,11 +8,14 @@ package buildcraft.factory.tile;
 import java.io.IOException;
 import java.util.List;
 
+import buildcraft.energy.BCRfWrapper;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -51,6 +54,8 @@ import buildcraft.lib.tile.TileBC_Neptune;
 import buildcraft.core.BCCoreConfig;
 import buildcraft.factory.BCFactoryBlocks;
 
+import javax.annotation.Nonnull;
+
 public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDebuggable {
     public static final FunctionContext MODEL_FUNC_CTX;
     private static final NodeVariableObject<EnumFacing> MODEL_FACING;
@@ -78,6 +83,7 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
     private final Tank tankLiquidOut = new Tank("liquidOut", 4 * Fluid.BUCKET_VOLUME, this);
 
     private final MjBattery mjBattery = new MjBattery(1024 * MjAPI.MJ);
+    private final BCRfWrapper wrapper = new BCRfWrapper(mjBattery);
 
     public final FluidSmoother smoothedTankIn;
     public final FluidSmoother smoothedTankGasOut;
@@ -113,6 +119,19 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
         caps.addCapabilityInstance(CapUtil.CAP_FLUIDS, tankLiquidOut, EnumPipePart.DOWN);
         caps.addCapabilityInstance(TilesAPI.CAP_HAS_WORK, () -> !tankIn.isEmpty(), EnumPipePart.VALUES);
         caps.addProvider(new MjCapabilityHelper(new MjBatteryReceiver(mjBattery)));
+    }
+
+    @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+        return getCapability(capability, facing) != null;
+    }
+
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY) {
+            return CapabilityEnergy.ENERGY.cast(wrapper);
+        }
+        return super.getCapability(capability, facing);
     }
 
     private IFluidDataSender createSender(int netId) {
@@ -294,7 +313,7 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
         left.add("LiquidOut = " + tankLiquidOut.getDebugString());
         left.add("Battery = " + mjBattery.getDebugString());
         left.add("Progress = " + MjAPI.formatMj(distillPower));
-        left.add("Rate = " + LocaleUtil.localizeMjFlow(powerAvgClient));
+        left.add("Rate = " + LocaleUtil.localizeRfFlow(powerAvgClient));
         left.add("CurrRecipe = " + currentRecipe);
     }
 

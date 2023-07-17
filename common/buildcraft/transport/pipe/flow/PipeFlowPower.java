@@ -209,7 +209,7 @@ public class PipeFlowPower extends PipeFlow implements IFlowPower, IDebuggable {
 
     @Override
     public void getDebugInfo(List<String> left, List<String> right, EnumFacing side) {
-        left.add("maxPower = " + LocaleUtil.localizeMj(maxPower));
+        left.add("maxPower = " + LocaleUtil.localizeRf(maxPower));
         left.add("isReceiver = " + isReceiver);
         left.add(
             "internalPower = " + arrayToString(s -> s.internalPower) + " <- " + arrayToString(s -> s.internalNextPower)

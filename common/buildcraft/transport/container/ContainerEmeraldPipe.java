@@ -15,20 +15,19 @@ import net.minecraftforge.fml.relauncher.Side;
 
 import buildcraft.api.transport.pipe.IPipeHolder.PipeMessageReceiver;
 
-import buildcraft.lib.gui.ContainerBC_Neptune;
 import buildcraft.lib.gui.ContainerPipe;
 import buildcraft.lib.gui.slot.SlotPhantom;
 import buildcraft.lib.net.PacketBufferBC;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
 
-import buildcraft.transport.pipe.behaviour.PipeBehaviourWoodDiamond;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourWoodDiamond.FilterMode;
+import buildcraft.transport.pipe.behaviour.PipeBehaviourEmerald;
+import buildcraft.transport.pipe.behaviour.PipeBehaviourEmerald.FilterMode;
 
-public class ContainerDiamondWoodPipe extends ContainerPipe {
-    private final PipeBehaviourWoodDiamond behaviour;
+public class ContainerEmeraldPipe extends ContainerPipe {
+    private final PipeBehaviourEmerald behaviour;
     private final ItemHandlerSimple filterInv;
 
-    public ContainerDiamondWoodPipe(EntityPlayer player, PipeBehaviourWoodDiamond behaviour) {
+    public ContainerEmeraldPipe(EntityPlayer player, PipeBehaviourEmerald behaviour) {
         super(player, behaviour.pipe.getHolder());
         this.behaviour = behaviour;
         this.filterInv = behaviour.filters;

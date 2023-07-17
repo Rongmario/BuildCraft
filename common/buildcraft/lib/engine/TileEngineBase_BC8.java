@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
+import buildcraft.api.mj.*;
+import buildcraft.energy.EngineStorageWrapper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -23,15 +25,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import buildcraft.api.enums.EnumPowerStage;
-import buildcraft.api.mj.IMjConnector;
-import buildcraft.api.mj.IMjReceiver;
-import buildcraft.api.mj.MjAPI;
-import buildcraft.api.mj.MjCapabilityHelper;
 import buildcraft.api.tiles.IDebuggable;
 
 import buildcraft.lib.block.VanillaRotationHandlers;
@@ -54,6 +54,7 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
     @Nonnull
     public final IMjConnector mjConnector = createConnector();
     private final MjCapabilityHelper mjCaps = new MjCapabilityHelper(mjConnector);
+    private final EngineStorageWrapper wrapper = new EngineStorageWrapper(this);
 
     protected double heat = MIN_HEAT;// TODO: sync gui data
     protected long power = 0;// TODO: sync gui data
@@ -465,13 +466,7 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
             return 0;
         }
 
-        long actualMax;
-
-        if (max > maxPowerExtracted()) {
-            actualMax = maxPowerExtracted();
-        } else {
-            actualMax = max;
-        }
+        long actualMax = Math.min(max, maxPowerExtracted());
 
         if (actualMax < min) {
             return 0;
@@ -494,27 +489,6 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
         }
 
         return extracted;
-    }
-
-    public final boolean isPoweredTile(TileEntity tile, EnumFacing side) {
-        if (tile == null) return false;
-        if (tile.getClass() == getClass()) {
-            TileEngineBase_BC8 other = (TileEngineBase_BC8) tile;
-            return other.currentDirection == currentDirection;
-        }
-        return getReceiverToPower(tile, side) != null;
-    }
-
-    /** @deprecated Replaced with {@link #getReceiverToPower(EnumFacing)}. */
-    @Deprecated
-    public IMjReceiver getReceiverToPower(TileEntity tile, EnumFacing side) {
-        if (tile == null) return null;
-        IMjReceiver rec = tile.getCapability(MjAPI.CAP_RECEIVER, side.getOpposite());
-        if (rec != null && rec.canConnect(mjConnector) && mjConnector.canConnect(rec)) {
-            return rec;
-        } else {
-            return null;
-        }
     }
 
     public IMjReceiver getReceiverToPower(EnumFacing side) {
@@ -551,6 +525,8 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
         IMjReceiver recv = next.getCapability(MjAPI.CAP_RECEIVER, side.getOpposite());
         if (recv != null && recv.canConnect(mjConnector) && mjConnector.canConnect(recv)) {
             return recv;
+        } else if (next.hasCapability(CapabilityEnergy.ENERGY, side.getOpposite())) {
+            return new RfWrapperReceiver(next.getCapability(CapabilityEnergy.ENERGY, side.getOpposite()));
         } else {
             return null;
         }
@@ -559,10 +535,19 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
     @Override
     public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
         if (facing == currentDirection) {
+            if (capability == CapabilityEnergy.ENERGY) {
+                return CapabilityEnergy.ENERGY.cast(wrapper);
+            }
             return mjCaps.getCapability(capability, facing);
         } else {
             return super.getCapability(capability, facing);
         }
+    }
+
+    @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY && facing == currentDirection) return true;
+        return super.hasCapability(capability, facing);
     }
 
     public abstract long getMaxPower();
@@ -607,10 +592,10 @@ public abstract class TileEngineBase_BC8 extends TileBC_Neptune implements ITick
     public void getDebugInfo(List<String> left, List<String> right, EnumFacing side) {
         left.add("facing = " + currentDirection);
         left.add("heat = " + LocaleUtil.localizeHeat(heat) + " -- " + String.format("%.2f %%", getHeatLevel()));
-        left.add("power = " + LocaleUtil.localizeMj(power));
+        left.add("power = " + LocaleUtil.localizeRf(power));
         left.add("stage = " + powerStage);
         left.add("progress = " + progress);
-        left.add("last = " + LocaleUtil.localizeMjFlow(lastPower));
+        left.add("last = " + LocaleUtil.localizeRfFlow(lastPower));
     }
 
     @SideOnly(Side.CLIENT)

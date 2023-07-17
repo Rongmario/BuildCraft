@@ -10,7 +10,7 @@ import net.minecraft.util.math.BlockPos;
 public enum BCTransportGuis {
     FILTERED_BUFFER,
     PIPE_DIAMOND,
-    PIPE_DIAMOND_WOOD,
+    PIPE_EMERALD,
     PIPE_EMZULI;
 
     public static final BCTransportGuis[] VALUES = values();

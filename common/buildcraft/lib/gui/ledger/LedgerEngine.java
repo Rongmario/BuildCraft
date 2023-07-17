@@ -31,9 +31,9 @@ public class LedgerEngine extends Ledger_Neptune {
         this.title = "gui.power";
 
         appendText(LocaleUtil.localize("gui.currentOutput") + ":", SUB_HEADER_COLOUR).setDropShadow(true);
-        appendText(() -> LocaleUtil.localizeMjFlow(engine.currentOutput), TEXT_COLOUR);
+        appendText(() -> LocaleUtil.localizeRfFlow(engine.currentOutput), TEXT_COLOUR);
         appendText(LocaleUtil.localize("gui.stored") + ":", SUB_HEADER_COLOUR).setDropShadow(true);
-        appendText(() -> LocaleUtil.localizeMj(engine.getEnergyStored()), TEXT_COLOUR);
+        appendText(() -> LocaleUtil.localizeRf(engine.getEnergyStored()), TEXT_COLOUR);
         appendText(LocaleUtil.localize("gui.heat") + ":", SUB_HEADER_COLOUR).setDropShadow(true);
         appendText(() -> LocaleUtil.localizeHeat(engine.getHeat()), TEXT_COLOUR);
         calculateMaxSize();

@@ -65,7 +65,7 @@ public class TilePowerConsumerTester extends TileBC_Neptune implements IMjReceiv
     @Override
     public void getDebugInfo(List<String> left, List<String> right, EnumFacing side) {
         left.add("");
-        left.add("Last received = " + LocaleUtil.localizeMj(lastReceived));
-        left.add("Total received = " + LocaleUtil.localizeMj(totalReceived));
+        left.add("Last received = " + LocaleUtil.localizeRf(lastReceived));
+        left.add("Total received = " + LocaleUtil.localizeRf(totalReceived));
     }
 }

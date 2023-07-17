@@ -21,11 +21,11 @@ import buildcraft.lib.gui.button.IButtonClickEventTrigger;
 import buildcraft.lib.gui.elem.ToolTip;
 import buildcraft.lib.misc.LocaleUtil;
 
-import buildcraft.transport.container.ContainerDiamondWoodPipe;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourWoodDiamond;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourWoodDiamond.FilterMode;
+import buildcraft.transport.container.ContainerEmeraldPipe;
+import buildcraft.transport.pipe.behaviour.PipeBehaviourEmerald;
+import buildcraft.transport.pipe.behaviour.PipeBehaviourEmerald.FilterMode;
 
-public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> implements IButtonClickEventListener {
+public class GuiEmeraldPipe extends GuiBC8<ContainerEmeraldPipe> implements IButtonClickEventListener {
     private static final ResourceLocation TEXTURE = new ResourceLocation("buildcrafttransport:textures/gui/pipe_emerald.png");
     private static final ResourceLocation TEXTURE_BUTTON = new ResourceLocation("buildcrafttransport:textures/gui/pipe_emerald_button.png");
     private static final int WHITE_LIST_BUTTON_ID = FilterMode.WHITE_LIST.ordinal();
@@ -40,10 +40,10 @@ public class GuiDiamondWoodPipe extends GuiBC8<ContainerDiamondWoodPipe> impleme
     private GuiImageButton blackListButton;
     private GuiImageButton roundRobinButton;
 
-    private PipeBehaviourWoodDiamond pipe;
+    private PipeBehaviourEmerald pipe;
 
-    public GuiDiamondWoodPipe(EntityPlayer player, PipeBehaviourWoodDiamond pipe) {
-        super(new ContainerDiamondWoodPipe(player, pipe));
+    public GuiEmeraldPipe(EntityPlayer player, PipeBehaviourEmerald pipe) {
+        super(new ContainerEmeraldPipe(player, pipe));
 
         this.pipe = pipe;
 

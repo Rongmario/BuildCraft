@@ -52,7 +52,6 @@ public class BCCoreConfig {
     public static int networkUpdateRate = 10;
     public static double miningMultiplier = 1;
     public static int miningMaxDepth;
-
     private static Property propColourBlindMode;
     private static Property propWorldGen;
     private static Property propWorldGenWaterSpring;
@@ -63,6 +62,7 @@ public class BCCoreConfig {
     private static Property propHideFluid;
     private static Property propGuideBookEnableDetail;
     private static Property propGuideItemSearchLimit;
+    private static Property propRfPerMj;
     private static Property propUseBucketsStatic;
     private static Property propUseBucketsFlow;
     private static Property propUseLongLocalizedName;
@@ -145,22 +145,27 @@ public class BCCoreConfig {
         propGuideItemSearchLimit.setMaxValue(5_000_000);
         none.setTo(propGuideItemSearchLimit);
 
-        propUseBucketsStatic = config.get(display, "useBucketsStatic", true);
+        propRfPerMj = config.get(general, "rfPerMj", 10);
+        propRfPerMj.setComment("How many rf = 1 mj");
+        propRfPerMj.setMinValue(0);
+        game.setTo(propRfPerMj);
+
+        propUseBucketsStatic = config.get(display, "useBucketsStatic", false);
         propUseBucketsStatic.setComment(
             "Should static fluid values be displayed in terms of buckets rather than thousandths of a bucket? (B vs mB)");
         none.setTo(propUseBucketsStatic);
 
-        propUseBucketsFlow = config.get(display, "useBucketsFlow", true);
+        propUseBucketsFlow = config.get(display, "useBucketsFlow", false);
         propUseBucketsFlow.setComment(
             "Should flowing fluid values be displayed in terms of buckets per second rather than thousandths of a bucket per tick? (B/s vs mB/t)");
         none.setTo(propUseBucketsFlow);
 
-        propUseLongLocalizedName = config.get(display, "useLongLocalizedName", true);
+        propUseLongLocalizedName = config.get(display, "useLongLocalizedName", false);
         propUseLongLocalizedName.setComment(
             "Should localised strings be displayed in long or short form (10 mB / t vs 10 milli buckets per tick");
         none.setTo(propUseLongLocalizedName);
 
-        propDisplayTimeGap = config.get(display, "timeGap", TimeGap.SECONDS.name().toLowerCase(Locale.ROOT));
+        propDisplayTimeGap = config.get(display, "timeGap", TimeGap.TICKS.name().toLowerCase(Locale.ROOT));
         propDisplayTimeGap
             .setComment("Should localised strings be displayed in terms of seconds (1 MJ/s) or ticks (20 MJ/t)");
         ConfigUtil.setEnumProperty(propDisplayTimeGap, TimeGap.values());

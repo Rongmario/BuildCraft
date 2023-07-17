@@ -275,7 +275,7 @@ public class TileAssemblyTable extends TileLaserTableBase {
     public void getDebugInfo(List<String> left, List<String> right, EnumFacing side) {
         super.getDebugInfo(left, right, side);
         left.add("recipes - " + recipesStates.size());
-        left.add("target - " + LocaleUtil.localizeMj(getTarget()));
+        left.add("target - " + LocaleUtil.localizeRf(getTarget()));
     }
 
     @Nullable
