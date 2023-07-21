@@ -73,9 +73,46 @@ ext.priv = parseConfig(file('private.properties'))
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+repositories {
+    maven { name="JEI"; url="http://dvs1.progwml6.com/files/maven" }
+    maven { name="TOP"; url="http://maven.tterrag.com/" }
+    maven { name="hwyla"; url="http://tehnut.info/maven" }
+    // The One probe depends on the RF API -- we don't use it ourselves, nor will we ever add compat for it...
+    maven { name="cofh"; url="http://maven.covers1624.net" }
+    maven { name="forestry"; url = "http://maven.ic2.player.to/" }
+    maven { name "CraftTweaker"; url "http://maven.blamejared.com/" }
+}
+
+
+
+
 dependencies {
     // Testing
     testCompile "junit:junit:4.12"
+
+
+    // JEI Stuff
+    // Versions from http://minecraft.curseforge.com/projects/just-enough-items-jei/files
+    compileOnly "mezz.jei:jei_${config.mc_version}:${config.jei_version}:api"
+    runtime "mezz.jei:jei_${config.mc_version}:${config.jei_version}"
+
+    // The One Probe Stuff
+    compileOnly "mcjty.theoneprobe:TheOneProbe-1.12:${config.top_version}:api"
+    runtime "mcjty.theoneprobe:TheOneProbe-1.12:${config.top_version}"
+    // The One Probe depends on the RF api for some odd reason... we never intend to add support for RF ourselves though.
+
+    // HWYLA
+    //compileOnly "mcp.mobius.waila:Hwyla:${config.hwyla_version}:api"
+    //runtime "mcp.mobius.waila:Hwyla:${config.hwyla_version}"
+
+    // Forestry
+    deobfCompile "net.sengir.forestry:forestry_${config.mc_version}:${config.forestry_version}"
+
+    deobfCompile "net.industrial-craft:industrialcraft-2:${config.ic2_version}"
+
+    // CraftTweaker
+    deobfCompile "CraftTweaker2:CraftTweaker2-API:${config.crafttweaker_version}"
+    deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${config.crafttweaker_version}"
 }
 
 minecraft {

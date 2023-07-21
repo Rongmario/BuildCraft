@@ -27,7 +27,6 @@ import buildcraft.api.core.BCLog;
 
 import buildcraft.lib.gui.GuiBC8;
 import buildcraft.lib.gui.GuiIcon;
-import buildcraft.lib.gui.ledger.LedgerHelp;
 import buildcraft.lib.gui.pos.GuiRectangle;
 import buildcraft.lib.gui.recipe.GuiRecipeBookPhantom;
 import buildcraft.lib.registry.TagManager;
@@ -59,7 +58,6 @@ public class GuiAdvancedCraftingTable extends GuiBC8<ContainerAdvancedCraftingTa
             book = null;
         }
         recipeBook = book;
-        mainGui.shownElements.add(new LedgerHelp(mainGui, true));
     }
 
     private void sendRecipe(IRecipe recipe) {

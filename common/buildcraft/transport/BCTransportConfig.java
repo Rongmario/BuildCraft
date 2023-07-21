@@ -40,8 +40,8 @@ public class BCTransportConfig {
     private static final long MJ_REQ_MILLIBUCKET_MIN = 100;
     private static final long MJ_REQ_ITEM_MIN = 50_000;
 
-    public static long mjPerMillibucket = 1_000;
-    public static long mjPerItem = MjAPI.MJ;
+    public static long mjPerMillibucket = 10_000;
+    public static long mjPerItem = 100_000;
     public static int baseFlowRate = 10;
     public static boolean fluidPipeColourBorder;
     public static PowerLossMode lossMode = PowerLossMode.DEFAULT;
@@ -88,7 +88,6 @@ public class BCTransportConfig {
             }
 
             baseFlowRate = MathUtil.clamp(propBaseFlowRate.getInt(), 1, 40);
-            int basePowerRate = 4;
 
             fluidPipeColourBorder = propFluidPipeColourBorder.getBoolean();
             PipeApi.flowFluids.fallbackColourType =
@@ -111,14 +110,15 @@ public class BCTransportConfig {
             fluidTransfer(BCTransportPipes.goldFluid, baseFlowRate * 8, 2);
             fluidTransfer(BCTransportPipes.voidFluid, baseFlowRate * 8, 10);
 
-            powerTransfer(BCTransportPipes.cobblePower, basePowerRate, 16, false);
-            powerTransfer(BCTransportPipes.stonePower, basePowerRate * 2, 32, false);
-            powerTransfer(BCTransportPipes.woodPower, basePowerRate * 4, 128, true);
-            powerTransfer(BCTransportPipes.sandstonePower, basePowerRate * 4, 32, false);
-            powerTransfer(BCTransportPipes.quartzPower, basePowerRate * 8, 32, false);
-            // powerTransfer(BCTransportPipes.ironPower, basePowerRate * 8, false);
-            powerTransfer(BCTransportPipes.goldPower, basePowerRate * 16, 32, false);
-            // powerTransfer(BCTransportPipes.diamondPower, basePowerRate * 32, false);
+            powerTransfer(BCTransportPipes.cobblePower, 80, false);
+            powerTransfer(BCTransportPipes.stonePower, 160, false);
+            powerTransfer(BCTransportPipes.woodPower, 320, true);
+            powerTransfer(BCTransportPipes.sandstonePower, 320, false);
+            powerTransfer(BCTransportPipes.quartzPower, 640, false);
+            powerTransfer(BCTransportPipes.ironPower, 1280, false);
+            powerTransfer(BCTransportPipes.goldPower, 2560, false);
+            powerTransfer(BCTransportPipes.diamondPower, 10240, false);
+            powerTransfer(BCTransportPipes.emeraldPower, 2560, true);
         }
     }
 
@@ -126,10 +126,8 @@ public class BCTransportConfig {
         PipeApi.fluidTransferData.put(def, new PipeApi.FluidTransferInfo(rate, delay));
     }
 
-    private static void powerTransfer(PipeDefinition def, int transferMultiplier, int resistanceDivisor, boolean recv) {
-        long transfer = MjAPI.MJ * transferMultiplier;
-        long resistance = MjAPI.MJ / resistanceDivisor;
-        PipeApi.powerTransferData.put(def, PowerTransferInfo.createFromResistance(transfer, resistance, recv));
+    private static void powerTransfer(PipeDefinition def, int transferMultiplier, boolean recv) {
+        PipeApi.powerTransferData.put(def, PowerTransferInfo.create(transferMultiplier, recv));
     }
 
     @SubscribeEvent

@@ -86,22 +86,16 @@ public class PipeBehaviourDaizuli extends PipeBehaviourDirectional {
 
     @Override
     public boolean onPipeActivate(EntityPlayer player, RayTraceResult trace, float hitX, float hitY, float hitZ, EnumPipePart part) {
-        if (part != EnumPipePart.CENTER && part != currentDir) {
-            // Activating the centre of a pipe always falls back to changing the colour
-            // And so does clicking on the current facing side
-            return super.onPipeActivate(player, trace, hitX, hitY, hitZ, part);
-        }
         if (player.world.isRemote) {
-            return EntityUtil.getWrenchHand(player) != null;
+            return true;
         }
-        if (EntityUtil.getWrenchHand(player) != null) {
-            EntityUtil.activateWrench(player, trace);
+        if (!player.isSneaking()) {
             int n = colour.getMetadata() + (player.isSneaking() ? 15 : 1);
             colour = EnumDyeColor.byMetadata(n & 15);
             pipe.getHolder().scheduleNetworkUpdate(PipeMessageReceiver.BEHAVIOUR);
             return true;
         }
-        return false;
+        return super.onPipeActivate(player, trace, hitX, hitY, hitZ, part);
     }
 
     @PipeEventHandler

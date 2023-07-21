@@ -13,6 +13,8 @@ import net.minecraftforge.common.util.INBTSerializable;
 import buildcraft.lib.misc.MathUtil;
 import buildcraft.lib.misc.NBTUtilBC;
 
+import java.util.Arrays;
+
 public class AverageDouble implements INBTSerializable<NBTTagCompound> {
     private double[] data;
     private int pos, precise;
@@ -74,5 +76,9 @@ public class AverageDouble implements INBTSerializable<NBTTagCompound> {
         averageRaw = nbt.getDouble("averageRaw");
         tickValue = nbt.getDouble("tickValue");
         data = NBTUtilBC.readDoubleArray(nbt.getTag("data"), precise);
+    }
+    @Override
+    public String toString() {
+        return String.valueOf(getAverage());
     }
 }

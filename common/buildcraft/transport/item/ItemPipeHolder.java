@@ -8,6 +8,7 @@ package buildcraft.transport.item;
 
 import java.util.List;
 
+import buildcraft.transport.BCTransportPipes;
 import gnu.trove.map.hash.TIntObjectHashMap;
 
 import net.minecraft.client.gui.FontRenderer;
@@ -159,7 +160,11 @@ public class ItemPipeHolder extends ItemBlock implements IItemBuildCraft, IItemP
             tooltip.add(LocaleUtil.localizeFluidFlow(fti.transferPerTick));
         } else if (definition.flowType == PipeApi.flowPower) {
             PipeApi.PowerTransferInfo pti = PipeApi.getPowerTransferInfo(definition);
-            tooltip.add(LocaleUtil.localizeRfFlow(pti.transferPerTick));
+            if (definition == BCTransportPipes.ironPower) {
+                tooltip.add(I18n.format("ironpower"));
+            } else {
+                tooltip.add(LocaleUtil.localizeRf2(pti.transferPerTick));
+            }
         }
     }
 }

@@ -21,8 +21,6 @@ import buildcraft.api.core.render.ISprite;
 
 import buildcraft.lib.gui.json.BuildCraftJsonGui;
 import buildcraft.lib.gui.json.InventorySlotHolder;
-import buildcraft.lib.gui.ledger.LedgerHelp;
-import buildcraft.lib.gui.ledger.LedgerOwnership;
 import buildcraft.lib.gui.pos.GuiRectangle;
 import buildcraft.lib.gui.pos.IGuiArea;
 import buildcraft.lib.misc.GuiUtil;
@@ -56,12 +54,6 @@ public abstract class GuiBC8<C extends ContainerBC_Neptune> extends GuiContainer
     }
 
     private final void standardLedgerInit() {
-        if (container instanceof ContainerBCTile<?>) {
-            mainGui.shownElements.add(new LedgerOwnership(mainGui, ((ContainerBCTile<?>) container).tile, true));
-        }
-        if (shouldAddHelpLedger()) {
-            mainGui.shownElements.add(new LedgerHelp(mainGui, false));
-        }
     }
 
     @Override

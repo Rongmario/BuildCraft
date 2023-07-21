@@ -20,7 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import buildcraft.api.recipes.AssemblyRecipe;
 
 public class AssemblyRecipeRegistry  {
-    public static final Map<ResourceLocation, AssemblyRecipe> REGISTRY = new HashMap<>();
+    public static Map<ResourceLocation, AssemblyRecipe> REGISTRY = new HashMap<>();
 
     public static void register(AssemblyRecipe recipe) {
         REGISTRY.put(recipe.getRegistryName(), recipe);

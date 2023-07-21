@@ -8,6 +8,7 @@ package buildcraft.transport.pipe.behaviour;
 
 import java.io.IOException;
 
+import buildcraft.transport.BCTransportConfig;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -111,7 +112,7 @@ public class PipeBehaviourEmerald extends PipeBehaviourWood {
     @Override
     public boolean onPipeActivate(EntityPlayer player, RayTraceResult trace, float hitX, float hitY, float hitZ,
         EnumPipePart part) {
-        if (EntityUtil.getWrenchHand(player) != null) {
+        if (player.isSneaking()) {
             return super.onPipeActivate(player, trace, hitX, hitY, hitZ, part);
         }
         ItemStack held = player.getHeldItemMainhand();
@@ -157,6 +158,37 @@ public class PipeBehaviourEmerald extends PipeBehaviourWood {
     }
 
     @Override
+    protected long extract(long power, boolean simulate) {
+        if (power > 0) {
+            if (pipe.getFlow() instanceof IFlowItems) {
+                IFlowItems flow = (IFlowItems) pipe.getFlow();
+                int maxItems = (int) (power / BCTransportConfig.mjPerItem);
+                if (maxItems > 64) maxItems = 64;
+                if (maxItems > 0) {
+                    int extracted = extractItems(flow, getCurrentDir(), maxItems, simulate);
+                    if (extracted > 0) {
+                        return power - extracted * BCTransportConfig.mjPerItem;
+                    }
+                }
+            } else if (pipe.getFlow() instanceof IFlowFluid) {
+                IFlowFluid flow = (IFlowFluid) pipe.getFlow();
+                int maxMillibuckets = (int) (power / BCTransportConfig.mjPerMillibucket);
+                if (maxMillibuckets > 80) maxMillibuckets = 80;
+                if (maxMillibuckets > 0) {
+                    FluidStack extracted = extractFluid(flow, getCurrentDir(), maxMillibuckets, simulate);
+                    if (extracted != null && extracted.amount > 0) {
+                        return power - extracted.amount * BCTransportConfig.mjPerMillibucket;
+                    }
+                }
+            }
+        }
+        return power;
+    }
+
+
+
+
+    @Override
     protected int extractItems(IFlowItems flow, EnumFacing dir, int count, boolean simulate) {
         if (filters.getStackInSlot(currentFilter).isEmpty()) {
             advanceFilter();
@@ -166,9 +198,6 @@ public class PipeBehaviourEmerald extends PipeBehaviourWood {
             advanceFilter();
         }
         return extracted;
-    }
-    private int max() {
-        return 80;
     }
     @Override
     protected FluidStack extractFluid(IFlowFluid flow, EnumFacing dir, int millibuckets, boolean simulate) {

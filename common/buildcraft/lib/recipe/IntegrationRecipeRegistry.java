@@ -19,8 +19,8 @@ import buildcraft.api.recipes.IIntegrationRecipeRegistry;
 import buildcraft.api.recipes.IntegrationRecipe;
 
 public class IntegrationRecipeRegistry implements IIntegrationRecipeRegistry {
-    public static final IntegrationRecipeRegistry INSTANCE = new IntegrationRecipeRegistry();
-    public final Map<ResourceLocation, IntegrationRecipe> recipes = new HashMap<>();
+    public static IntegrationRecipeRegistry INSTANCE = new IntegrationRecipeRegistry();
+    public Map<ResourceLocation, IntegrationRecipe> recipes = new HashMap<>();
 
     @Override
     public IntegrationRecipe getRecipeFor(@Nonnull ItemStack target, @Nonnull NonNullList<ItemStack> toIntegrate) {

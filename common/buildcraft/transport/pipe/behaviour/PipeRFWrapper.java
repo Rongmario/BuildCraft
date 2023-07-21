@@ -13,9 +13,19 @@ public class PipeRFWrapper implements IEnergyStorage {
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
         long mj = maxReceive * MjAPI.MJ / MjAPI.rfPerMj;
-        long excess = pipeReceiver.receivePower(mj, simulate);
+        long excess = pipeReceiver.receivePower(mj, true);
         long difference = mj - excess;
-        return (int) (difference * MjAPI.rfPerMj / MjAPI.MJ);
+        int ret = mjToRf(difference);
+        if (ret > 0) {
+            pipeReceiver.receivePower(mj, simulate);
+            return ret;
+        }
+        return 0;
+    }
+
+    private int mjToRf(long mj) {
+        double rf = (double) (mj * MjAPI.rfPerMj) / (double) MjAPI.MJ;
+        return (int) Math.ceil(rf);
     }
 
     @Override

@@ -80,16 +80,12 @@ public class PipeBehaviourLapis extends PipeBehaviour {
     @Override
     public boolean onPipeActivate(EntityPlayer player, RayTraceResult trace, float hitX, float hitY, float hitZ, EnumPipePart part) {
         if (player.world.isRemote) {
-            return EntityUtil.getWrenchHand(player) != null;
-        }
-        if (EntityUtil.getWrenchHand(player) != null) {
-            EntityUtil.activateWrench(player, trace);
-            int n = colour.getMetadata() + (player.isSneaking() ? 15 : 1);
-            colour = EnumDyeColor.byMetadata(n & 15);
-            pipe.getHolder().scheduleNetworkUpdate(PipeMessageReceiver.BEHAVIOUR);
             return true;
         }
-        return false;
+        int n = colour.getMetadata() + (player.isSneaking() ? 15 : 1);
+        colour = EnumDyeColor.byMetadata(n & 15);
+        pipe.getHolder().scheduleNetworkUpdate(PipeMessageReceiver.BEHAVIOUR);
+        return true;
     }
 
     @PipeEventHandler

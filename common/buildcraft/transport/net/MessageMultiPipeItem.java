@@ -129,10 +129,7 @@ public class MessageMultiPipeItem implements IMessage {
     }
 
     public static final IMessageHandler<MessageMultiPipeItem, IMessage> HANDLER =
-        new IMessageHandler<MessageMultiPipeItem, IMessage>() {
-
-            @Override
-            public IMessage onMessage(MessageMultiPipeItem message, MessageContext ctx) {
+            (message, ctx) -> {
                 World world = BCLibProxy.getProxy().getClientWorld();
                 if (world == null) {
                     return null;
@@ -152,6 +149,5 @@ public class MessageMultiPipeItem implements IMessage {
                     }
                 }
                 return null;
-            }
-        };
+            };
 }

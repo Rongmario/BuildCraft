@@ -73,9 +73,7 @@ public abstract class PipeBehaviourDirectional extends PipeBehaviour {
     @Override
     public boolean onPipeActivate(EntityPlayer player, RayTraceResult trace, float hitX, float hitY, float hitZ,
         EnumPipePart part) {
-        if (EntityUtil.getWrenchHand(player) != null) {
-            EntityUtil.activateWrench(player, trace);
-
+        if (player.isSneaking()) {
             if (part == EnumPipePart.CENTER) {
                 return advanceFacing();
             } else if (part.face != getCurrentDir() && canFaceDirection(part.face)) {
@@ -115,11 +113,11 @@ public abstract class PipeBehaviourDirectional extends PipeBehaviour {
     }
 
     @Nullable
-    protected EnumFacing getCurrentDir() {
+    public EnumFacing getCurrentDir() {
         return currentDir.face;
     }
 
-    protected void setCurrentDir(EnumFacing setTo) {
+    public void setCurrentDir(EnumFacing setTo) {
         if (this.currentDir.face == setTo) {
             return;
         }

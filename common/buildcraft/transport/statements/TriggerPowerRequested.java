@@ -32,7 +32,8 @@ public class TriggerPowerRequested extends BCStatement implements ITriggerIntern
         }
         final PipeFlowPower flow = (PipeFlowPower) f;
 
-        return flow.getPowerRequested(null) > 0;
+        //return flow.getPowerRequested(null) > 0;
+        return false;
     }
 
     @Override

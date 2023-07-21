@@ -83,7 +83,7 @@ public class TileIntegrationTable extends TileLaserTableBase {
     @Override
     public long getTarget() {
         ItemStack output = getOutput();
-        return recipe != null && isSpaceEnough(output) ? recipe.getRequiredMicroJoules(output) : 0;
+        return recipe != null && isSpaceEnough(output) ? recipe.getRequiredMicroJoules() : 0;
     }
 
     @Override

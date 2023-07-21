@@ -8,6 +8,7 @@ package buildcraft.transport;
 
 import java.util.Arrays;
 
+import buildcraft.transport.pipe.behaviour.*;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -20,25 +21,6 @@ import buildcraft.api.transport.pipe.PipeDefinition.PipeDefinitionBuilder;
 import buildcraft.api.transport.pipe.PipeFlowType;
 
 import buildcraft.transport.pipe.PipeRegistry;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourClay;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourCobble;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourDaizuli;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourDiamondFluid;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourDiamondItem;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourEmzuli;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourGold;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourIron;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourLapis;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourObsidian;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourQuartz;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourSandstone;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourStone;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourStripes;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourStructure;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourVoid;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourWood;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourEmerald;
-import buildcraft.transport.pipe.behaviour.PipeBehaviourWoodPower;
 
 public class BCTransportPipes {
     public static PipeDefinition structure;
@@ -69,14 +51,15 @@ public class BCTransportPipes {
 
     public static PipeDefinition ironItem;
     public static PipeDefinition ironFluid;
-    // public static PipeDefinition ironPower;
+    public static PipeDefinition ironPower;
 
     public static PipeDefinition diamondItem;
     public static PipeDefinition diamondFluid;
-    // public static PipeDefinition diamondPower;
+    public static PipeDefinition diamondPower;
 
     public static PipeDefinition emeraldItem;
     public static PipeDefinition emeraldFluid;
+    public static PipeDefinition emeraldPower;
 
     public static PipeDefinition clayItem;
     public static PipeDefinition clayFluid;
@@ -125,6 +108,7 @@ public class BCTransportPipes {
         goldItem = builder.idTex("gold_item").flowItem().define();
         goldFluid = builder.idTex("gold_fluid").flowFluid().define();
         goldPower = builder.idTex("gold_power").flowPower().define();
+        diamondPower = builder.idTexPrefix("diamond_power").flowPower().define();
 
         builder.logic(PipeBehaviourSandstone::new, PipeBehaviourSandstone::new);
         sandstoneItem = builder.idTex("sandstone_item").flowItem().define();
@@ -134,7 +118,10 @@ public class BCTransportPipes {
         builder.logic(PipeBehaviourIron::new, PipeBehaviourIron::new).texSuffixes("_clear", "_filled");
         ironItem = builder.idTexPrefix("iron_item").flowItem().define();
         ironFluid = builder.idTexPrefix("iron_fluid").flowFluid().define();
-        // ironPower = builder.idTexPrefix("iron_power").flowPower().define();
+
+        String[] texSuffix1 = new String[]{"_0", "_1", "_2", "_3", "_4", "_5", "_6"};
+        builder.logic(PipeBehaviourIronPower::new, PipeBehaviourIronPower::new).texSuffixes(texSuffix1);
+        ironPower = builder.idTexPrefix("iron_power").flowPower().define();
 
         String[] diamondTextureSuffixes = new String[8];
         diamondTextureSuffixes[0] = "";
@@ -154,6 +141,8 @@ public class BCTransportPipes {
         builder.logic(PipeBehaviourEmerald::new, PipeBehaviourEmerald::new).texSuffixes("_clear", "_filled");
         emeraldItem = builder.idTexPrefix("emerald_item").flowItem().define();
         emeraldFluid = builder.idTexPrefix("emerald_fluid").flowFluid().define();
+        builder.logic(PipeBehaviourWoodPower::new, PipeBehaviourWoodPower::new);
+        emeraldPower = builder.idTexPrefix("emerald_power").flowPower().define();
 
         builder.logic(PipeBehaviourClay::new, PipeBehaviourClay::new);
         clayItem = builder.idTex("clay_item").flowItem().define();

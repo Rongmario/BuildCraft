@@ -68,12 +68,22 @@ public class IntegrationRecipeBasic extends IntegrationRecipe {
     }
 
     @Override
-    public long getRequiredMicroJoules(ItemStack output) {
+    public long getRequiredMicroJoules() {
         return requiredMicroJoules;
     }
 
     @Override
     public IngredientStack getCenterStack() {
         return target;
+    }
+
+    @Override
+    public List<IngredientStack> getSurrounding() {
+        return toIntegrate;
+    }
+
+    @Override
+    public ItemStack getOutput() {
+        return output;
     }
 }

@@ -7,9 +7,9 @@
 package buildcraft.lib.misc.data;
 
 public class AverageInt {
-    private int[] data;
-    private int pos, precise;
-    private int averageRaw, tickValue;
+    public int[] data;
+    public int pos, precise;
+    public int averageRaw, tickValue;
 
     public AverageInt(int precise) {
         this.precise = precise;
@@ -22,7 +22,10 @@ public class AverageInt {
     }
 
     public double getAverage() {
-        return (double) averageRaw / precise;
+        //return (double) averageRaw / precise;
+        double avg = 0;
+        for (double d : data) avg += d;
+        return avg / (double) precise;
     }
 
     public void tick(int value) {
@@ -51,5 +54,10 @@ public class AverageInt {
 
     public void push(int value) {
         tickValue += value;
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(getAverage());
     }
 }

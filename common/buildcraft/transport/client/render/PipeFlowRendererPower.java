@@ -8,6 +8,7 @@ package buildcraft.transport.client.render;
 
 import javax.vecmath.Point3f;
 
+import buildcraft.lib.misc.data.AverageDouble;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
@@ -17,7 +18,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import buildcraft.api.mj.MjAPI;
 import buildcraft.api.transport.pipe.IPipeFlowRenderer;
 
 import buildcraft.lib.client.model.ModelUtil;
@@ -28,7 +28,6 @@ import buildcraft.lib.misc.VecUtil;
 
 import buildcraft.transport.BCTransportSprites;
 import buildcraft.transport.pipe.flow.PipeFlowPower;
-import buildcraft.transport.pipe.flow.PipeFlowPower.Section;
 
 @SideOnly(Side.CLIENT)
 public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
@@ -39,9 +38,10 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
         double centrePower = 0;
         double[] power = new double[6];
         for (EnumFacing side : EnumFacing.values()) {
-            Section s = flow.getSection(side);
             int i = side.ordinal();
-            power[i] = s.displayPower / (double) MjAPI.MJ;
+            if (flow.displayPowerAverage[i] == null) flow.displayPowerAverage[i] = new AverageDouble(8);
+            power[i] = flow.displayPowerAverage[i].getAverage();
+            if (power[i] > 1.0) power[i] = 1.0;
             centrePower = Math.max(centrePower, power[i]);
         }
 
@@ -53,10 +53,10 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
                     continue;
                 }
                 int i = side.ordinal();
-                Section s = flow.getSection(side);
-                double offset = MathUtil.interp(partialTicks, s.clientDisplayFlowLast, s.clientDisplayFlow);
+                double offset = MathUtil.interp(partialTicks, flow.clientDisplayFlowLast[i], flow.clientDisplayFlow[i]);
                 renderSidePower(side, power[i], centrePower, offset, bb);
             }
+
 
             renderCentrePower(centrePower, flow.clientDisplayFlowCentre, bb);
         }
@@ -65,19 +65,19 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
     }
 
     private static void renderSidePower(EnumFacing side, double power, double centrePower, double offset,
-        BufferBuilder bb) {
+                                        BufferBuilder bb) {
         if (power < 0) {
             return;
         }
         boolean overload = false;
         double radius = 0.248 * power;
-        if (radius >= 0.248) {
-            // overload = true;
+        if (radius >= 0.248 || (centrePower >= 1 && power > 0)) {
+            overload = true;
             radius = 0.248;
         }
 
         TextureAtlasSprite sprite = (overload ? BCTransportSprites.POWER_FLOW_OVERLOAD : BCTransportSprites.POWER_FLOW)
-            .getSprite();
+                .getSprite();
 
         double centreRadius = 0.252 - (0.248 * centrePower);
 
@@ -108,12 +108,12 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
     private static void renderCentrePower(double power, Vec3d offset, BufferBuilder bb) {
         boolean overload = false;
         float radius = 0.248f * (float) power;
-        if (radius > 0.248f) {
-            // overload = true;
+        if (radius > 0.248f || power >= 1) {
+            overload = true;
             radius = 0.248f;
         }
         TextureAtlasSprite sprite = (overload ? BCTransportSprites.POWER_FLOW_OVERLOAD : BCTransportSprites.POWER_FLOW)
-            .getSprite();
+                .getSprite();
 
         Point3f centre = new Point3f(0.5f, 0.5f, 0.5f);
         Point3f radiusP = new Point3f(radius, radius, radius);
@@ -123,8 +123,8 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
         for (EnumFacing face : EnumFacing.values()) {
 
             AxisAlignedBB box = new AxisAlignedBB(
-                new Vec3d(0.5 - radius, 0.5 - radius, 0.5 - radius).scale(0.5), //
-                new Vec3d(0.5 + radius, 0.5 + radius, 0.5 + radius).scale(0.5)//
+                    new Vec3d(0.5 - radius, 0.5 - radius, 0.5 - radius).scale(0.5), //
+                    new Vec3d(0.5 + radius, 0.5 + radius, 0.5 + radius).scale(0.5)//
             );
             box = box.offset(offset.scale(1 / 32.0));
             ModelUtil.mapBoxToUvs(box, face, uvs);
@@ -135,4 +135,5 @@ public enum PipeFlowRendererPower implements IPipeFlowRenderer<PipeFlowPower> {
             quad.render(bb);
         }
     }
+
 }

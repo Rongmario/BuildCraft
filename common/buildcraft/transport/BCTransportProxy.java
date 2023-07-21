@@ -6,6 +6,7 @@
 
 package buildcraft.transport;
 
+import buildcraft.transport.net.PacketPowerUpdate;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -116,6 +117,7 @@ public abstract class BCTransportProxy implements IGuiHandler {
         MessageManager.registerMessageClass(BCModules.TRANSPORT, MessageWireSystems.class, Side.CLIENT);
         MessageManager.registerMessageClass(BCModules.TRANSPORT, MessageWireSystemsPowered.class, Side.CLIENT);
         MessageManager.registerMessageClass(BCModules.TRANSPORT, MessageMultiPipeItem.class, Side.CLIENT);
+        MessageManager.registerMessageClass(BCModules.TRANSPORT, PacketPowerUpdate.class, Side.CLIENT);
     }
 
     public void fmlInit() {}
@@ -140,6 +142,7 @@ public abstract class BCTransportProxy implements IGuiHandler {
             MessageManager.setHandler(MessageWireSystems.class, MessageWireSystems.HANDLER, Side.CLIENT);
             MessageManager.setHandler(MessageWireSystemsPowered.class, MessageWireSystemsPowered.HANDLER, Side.CLIENT);
             MessageManager.setHandler(MessageMultiPipeItem.class, MessageMultiPipeItem.HANDLER, Side.CLIENT);
+            MessageManager.setHandler(PacketPowerUpdate.class, PacketPowerUpdate.HANDLER, Side.CLIENT);
         }
 
         @Override

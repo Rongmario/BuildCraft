@@ -8,6 +8,8 @@ package buildcraft.lib.misc.data;
 
 import net.minecraft.nbt.NBTTagCompound;
 
+import java.util.Arrays;
+
 public class AverageLong {
     private long[] data;
     private final int precise;
@@ -84,5 +86,10 @@ public class AverageLong {
                 data[i] = val;
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.valueOf(getAverage());
     }
 }

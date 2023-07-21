@@ -7,7 +7,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
 import buildcraft.lib.gui.json.BuildCraftJsonGui;
-import buildcraft.lib.gui.ledger.LedgerHelp;
 import buildcraft.lib.gui.pos.IGuiArea;
 import buildcraft.lib.misc.GuiUtil;
 
@@ -49,9 +48,6 @@ public class GuiScreenBuildCraft extends GuiScreen {
     }
 
     private final void standardLedgerInit() {
-        if (shouldAddHelpLedger()) {
-            mainGui.shownElements.add(new LedgerHelp(mainGui, false));
-        }
     }
 
     protected boolean shouldAddHelpLedger() {

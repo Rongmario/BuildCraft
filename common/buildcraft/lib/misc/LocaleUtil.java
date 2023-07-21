@@ -167,23 +167,17 @@ public class LocaleUtil {
         return localize(localeKeyFluidFlow, amount);
     }
 
-    public static String localizeMj(long mj) {
-        return localize(localeKeyMjStatic, MjAPI.formatMj(mj));
-    }
-
-    public static String localizeMjFlow(long mj) {
-        mj = BCLibConfig.displayTimeGap.convertTicksToGap(mj);
-        return localize(localeKeyMjFlow, MjAPI.formatMj(mj));
-    }
-
     public static String localizeRfFlow(long mj) {
-        String rf = MjAPI.formatMj(BCLibConfig.displayTimeGap.convertTicksToGap(mj) * MjAPI.rfPerMj);
+        String rf = MjAPI.formatRFFromMj(BCLibConfig.displayTimeGap.convertTicksToGap(mj));
         return localize(localeKeyRfFlow, rf);
     }
 
+    public static String localizeRf2(int rf) {
+        return localize(localeKeyRfFlow, MjAPI.formatRF(rf));
+    }
+
     public static String localizeRf(long mj) {
-        String rf = MjAPI.formatMj(mj * MjAPI.rfPerMj);
-        return localize(localeKeyRfStatic, rf);
+        return localize(localeKeyRfStatic, (int) (mj * MjAPI.rfPerMj / MjAPI.MJ));
     }
     public static String localizeHeat(double heat) {
         // if (BCLibConfig.useLongLocalizedName) {

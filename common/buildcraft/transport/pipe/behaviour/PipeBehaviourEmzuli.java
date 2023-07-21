@@ -207,7 +207,7 @@ public class PipeBehaviourEmzuli extends PipeBehaviourWood {
 
     @Override
     public boolean onPipeActivate(EntityPlayer player, RayTraceResult trace, float hitX, float hitY, float hitZ, EnumPipePart part) {
-        if (EntityUtil.getWrenchHand(player) != null) {
+        if (player.isSneaking()) {
             return super.onPipeActivate(player, trace, hitX, hitY, hitZ, part);
         }
         if (player.isServerWorld()) {

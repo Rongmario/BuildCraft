@@ -28,7 +28,6 @@ import buildcraft.api.core.BCLog;
 
 import buildcraft.lib.gui.GuiBC8;
 import buildcraft.lib.gui.GuiIcon;
-import buildcraft.lib.gui.ledger.LedgerHelp;
 import buildcraft.lib.gui.pos.GuiRectangle;
 import buildcraft.lib.gui.recipe.GuiRecipeBookPhantom;
 import buildcraft.lib.gui.slot.SlotBase;
@@ -69,7 +68,6 @@ public class GuiAutoCraftItems extends GuiBC8<ContainerAutoCraftItems> implement
             book = null;
         }
         recipeBook = book;
-        mainGui.shownElements.add(new LedgerHelp(mainGui, true));
     }
 
     private void sendRecipe(IRecipe recipe) {
