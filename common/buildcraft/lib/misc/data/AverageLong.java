@@ -27,11 +27,19 @@ public class AverageLong {
     }
 
     public double getAverage() {
-        return (double) averageRaw / precise;
+        double s = 0;
+        for (long l : data) {
+            s += l;
+        }
+        return s / precise;
     }
 
     public long getAverageLong() {
-        return averageRaw / precise;
+        long s = 0;
+        for (long l : data) {
+            s += l;
+        }
+        return s / precise;
     }
 
     public void tick(long value) {

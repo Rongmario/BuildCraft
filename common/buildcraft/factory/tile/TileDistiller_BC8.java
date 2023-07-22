@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 import buildcraft.energy.BCRfWrapper;
+import buildcraft.lib.fluid.TankIO;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -65,7 +66,6 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
 
     public static final IdAllocator IDS = TileBC_Neptune.IDS.makeChild("Distiller");
     public static final int NET_TANK_IN = IDS.allocId("TANK_IN");
-    public static final int NET_TANK_GAS_OUT = IDS.allocId("TANK_GAS_OUT");
     public static final int NET_TANK_LIQUID_OUT = IDS.allocId("TANK_LIQUID_OUT");
 
     static {
@@ -76,24 +76,23 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
         MODEL_ACTIVE = MODEL_FUNC_CTX.putVariableBoolean("active");
     }
 
-    public static final long MAX_MJ_PER_TICK = 6 * MjAPI.MJ;
+    public static final long MAX_MJ_PER_TICK = 20 * MjAPI.MJ;
 
     private final Tank tankIn = new Tank("in", 4 * Fluid.BUCKET_VOLUME, this, this::isDistillableFluid);
-    private final Tank tankGasOut = new Tank("gasOut", 4 * Fluid.BUCKET_VOLUME, this);
     private final Tank tankLiquidOut = new Tank("liquidOut", 4 * Fluid.BUCKET_VOLUME, this);
+    private final TankIO io = new TankIO(tankIn, tankLiquidOut);
 
     private final MjBattery mjBattery = new MjBattery(1024 * MjAPI.MJ);
     private final BCRfWrapper wrapper = new BCRfWrapper(mjBattery);
 
     public final FluidSmoother smoothedTankIn;
-    public final FluidSmoother smoothedTankGasOut;
     public final FluidSmoother smoothedTankLiquidOut;
 
     /** The model variables, used to keep track of the various state-based variables. */
     public final ModelVariableData clientModelData = new ModelVariableData();
 
     private IDistillationRecipe currentRecipe;
-    private long distillPower = 0;
+    //private long distillPower = 0;
     private boolean isActive = false;
     private final AverageLong powerAvg = new AverageLong(100);
     private final SafeTimeTracker updateTracker = new SafeTimeTracker(BCCoreConfig.networkUpdateRate, 2);
@@ -103,20 +102,19 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
 
     public TileDistiller_BC8() {
         tankIn.setCanDrain(false);
-        tankGasOut.setCanFill(false);
         tankLiquidOut.setCanFill(false);
 
         tankManager.add(tankIn);
-        tankManager.add(tankGasOut);
         tankManager.add(tankLiquidOut);
 
         smoothedTankIn = new FluidSmoother(createSender(NET_TANK_IN), tankIn);
-        smoothedTankGasOut = new FluidSmoother(createSender(NET_TANK_GAS_OUT), tankGasOut);
         smoothedTankLiquidOut = new FluidSmoother(createSender(NET_TANK_LIQUID_OUT), tankLiquidOut);
 
-        caps.addCapabilityInstance(CapUtil.CAP_FLUIDS, tankIn, EnumPipePart.HORIZONTALS);
-        caps.addCapabilityInstance(CapUtil.CAP_FLUIDS, tankGasOut, EnumPipePart.UP);
-        caps.addCapabilityInstance(CapUtil.CAP_FLUIDS, tankLiquidOut, EnumPipePart.DOWN);
+        //caps.addCapabilityInstance(CapUtil.CAP_FLUIDS, tankIn, EnumPipePart.VALUES);
+        //caps.addCapabilityInstance(CapUtil.CAP_FLUIDS, tankLiquidOut, EnumPipePart.VALUES);
+
+        caps.addCapabilityInstance(CapUtil.CAP_FLUIDS, io, EnumPipePart.VALUES);
+
         caps.addCapabilityInstance(TilesAPI.CAP_HAS_WORK, () -> !tankIn.isEmpty(), EnumPipePart.VALUES);
         caps.addProvider(new MjCapabilityHelper(new MjBatteryReceiver(mjBattery)));
     }
@@ -149,7 +147,7 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
         super.writeToNBT(nbt);
         nbt.setTag("tanks", tankManager.serializeNBT());
         nbt.setTag("battery", mjBattery.serializeNBT());
-        nbt.setLong("distillPower", distillPower);
+        //nbt.setLong("distillPower", distillPower);
         powerAvg.writeToNbt(nbt, "powerAvg");
         return nbt;
     }
@@ -158,9 +156,6 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
     public void readFromNBT(NBTTagCompound nbt) {
         // TODO: remove in next version
         NBTTagCompound tanksTag = nbt.getCompoundTag("tanks");
-        if (tanksTag.hasKey("out_gas")) {
-            tanksTag.setTag("gasOut", tanksTag.getTag("out_gas"));
-        }
         if (tanksTag.hasKey("out_liquid")) {
             tanksTag.setTag("liquidOut", tanksTag.getTag("out_liquid"));
         }
@@ -171,7 +166,7 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
             nbt.setTag("battery", nbt.getTag("mjBattery"));
         }
         mjBattery.deserializeNBT(nbt.getCompoundTag("battery"));
-        distillPower = nbt.getLong("distillPower");
+        //distillPower = nbt.getLong("distillPower");
         powerAvg.readFromNbt(nbt, "powerAvg");
     }
 
@@ -181,7 +176,6 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
         if (side == Side.SERVER) {
             if (id == NET_RENDER_DATA) {
                 writePayload(NET_TANK_IN, buffer, side);
-                writePayload(NET_TANK_GAS_OUT, buffer, side);
                 writePayload(NET_TANK_LIQUID_OUT, buffer, side);
                 buffer.writeBoolean(isActive);
                 powerAvgClient = powerAvg.getAverageLong();
@@ -190,8 +184,6 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
                 buffer.writeLong(powerAvgClient);
             } else if (id == NET_TANK_IN) {
                 smoothedTankIn.writeInit(buffer);
-            } else if (id == NET_TANK_GAS_OUT) {
-                smoothedTankGasOut.writeInit(buffer);
             } else if (id == NET_TANK_LIQUID_OUT) {
                 smoothedTankLiquidOut.writeInit(buffer);
             }
@@ -204,19 +196,15 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
         if (side == Side.CLIENT) {
             if (id == NET_RENDER_DATA) {
                 readPayload(NET_TANK_IN, buffer, side, ctx);
-                readPayload(NET_TANK_GAS_OUT, buffer, side, ctx);
                 readPayload(NET_TANK_LIQUID_OUT, buffer, side, ctx);
 
                 smoothedTankIn.resetSmoothing(getWorld());
-                smoothedTankGasOut.resetSmoothing(getWorld());
                 smoothedTankLiquidOut.resetSmoothing(getWorld());
 
                 isActive = buffer.readBoolean();
                 powerAvgClient = buffer.readLong();
             } else if (id == NET_TANK_IN) {
                 smoothedTankIn.handleMessage(getWorld(), buffer);
-            } else if (id == NET_TANK_GAS_OUT) {
-                smoothedTankGasOut.handleMessage(getWorld(), buffer);
             } else if (id == NET_TANK_LIQUID_OUT) {
                 smoothedTankLiquidOut.handleMessage(getWorld(), buffer);
             }
@@ -248,7 +236,6 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
     @Override
     public void update() {
         smoothedTankIn.tick(getWorld());
-        smoothedTankGasOut.tick(getWorld());
         smoothedTankLiquidOut.tick(getWorld());
         if (world.isRemote) {
             setClientModelVariables(1);
@@ -261,42 +248,30 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
         currentRecipe =
             BuildcraftRecipeRegistry.refineryRecipes.getDistillationRegistry().getRecipeForInput(tankIn.getFluid());
         if (currentRecipe == null) {
-            mjBattery.addPowerChecking(distillPower, false);
-            distillPower = 0;
+            //mjBattery.addPowerChecking(distillPower, false);
+            //distillPower = 0;
             isActive = false;
         } else {
             FluidStack reqIn = currentRecipe.in();
             FluidStack outLiquid = currentRecipe.outLiquid();
-            FluidStack outGas = currentRecipe.outGas();
 
             FluidStack potentialIn = tankIn.drainInternal(reqIn, false);
             boolean canExtract = reqIn.isFluidStackIdentical(potentialIn);
 
             boolean canFillLiquid = tankLiquidOut.fillInternal(outLiquid, false) == outLiquid.amount;
-            boolean canFillGas = tankGasOut.fillInternal(outGas, false) == outGas.amount;
 
-            if (canExtract && canFillLiquid && canFillGas) {
-                long max = MAX_MJ_PER_TICK;
-                max *= mjBattery.getStored() + max;
-                max /= mjBattery.getCapacity() / 2;
-                max = Math.min(max, MAX_MJ_PER_TICK);
-                long powerReq = currentRecipe.powerRequired();
-                long power = mjBattery.extractPower(0, max);
-                powerAvg.push(max);
-                distillPower += power;
-                isActive = power > 0;
-                if (distillPower >= powerReq) {
-                    isActive = true;
-                    distillPower -= powerReq;
-                    tankIn.drainInternal(reqIn, true);
-                    tankGasOut.fillInternal(outGas, true);
-                    tankLiquidOut.fillInternal(outLiquid, true);
-                }
+            long stored = mjBattery.getStored();
+            if (stored > currentRecipe.powerRequired() && canExtract && canFillLiquid) {
+                mjBattery.extractPower(currentRecipe.powerRequired());
+                isActive = true;
+                tankIn.drainInternal(reqIn, true);
+                tankLiquidOut.fillInternal(outLiquid, true);
+                powerAvg.push(currentRecipe.powerRequired());
             } else {
-                mjBattery.addPowerChecking(distillPower, false);
-                distillPower = 0;
                 isActive = false;
+                powerAvg.push(0);
             }
+
         }
 
         if (changedSinceNetUpdate && updateTracker.markTimeIfDelay(world)) {
@@ -309,10 +284,9 @@ public class TileDistiller_BC8 extends TileBC_Neptune implements ITickable, IDeb
     @Override
     public void getDebugInfo(List<String> left, List<String> right, EnumFacing side) {
         left.add("In = " + tankIn.getDebugString());
-        left.add("GasOut = " + tankGasOut.getDebugString());
         left.add("LiquidOut = " + tankLiquidOut.getDebugString());
         left.add("Battery = " + mjBattery.getDebugString());
-        left.add("Progress = " + MjAPI.formatMj(distillPower));
+        //left.add("Progress = " + MjAPI.formatMj(distillPower));
         left.add("Rate = " + LocaleUtil.localizeRfFlow(powerAvgClient));
         left.add("CurrRecipe = " + currentRecipe);
     }

@@ -9,6 +9,7 @@ package buildcraft.silicon.container;
 import java.util.ArrayList;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 
 import buildcraft.lib.gui.ContainerBCTile;
@@ -39,5 +40,14 @@ public class ContainerAssemblyTable extends ContainerBCTile<TileAssemblyTable> {
         return index < tile.recipesStates.size()
                 ? new ArrayList<>(tile.recipesStates.keySet()).get(index).output
                 : ItemStack.EMPTY;
+    }
+
+
+    @Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int index) {
+        if (!player.world.isRemote) {
+            detectAndSendChanges();
+        }
+        return super.transferStackInSlot(player, index);
     }
 }

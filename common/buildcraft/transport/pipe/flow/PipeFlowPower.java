@@ -110,6 +110,11 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
             reconfigure();
         }
 
+        for (int i = 0; i < 6; i++) {
+            if (internalPower[i] < 1.0) internalPower[i] = 0;
+            if (internalNextPower[i] < 1.0) internalNextPower[i] = 0;
+        }
+
         if (pipe.getHolder().getPipeWorld().isRemote) {
             clientDisplayFlowCentreLast = clientDisplayFlowCentre;
             for (EnumFacing face : EnumFacing.VALUES) {

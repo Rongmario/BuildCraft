@@ -17,19 +17,6 @@
         {
             "comment": "Bottom Tank",
             "from": [8, 0, 0],
-            "to": [16, 8, 16],
-            "faces": {
-                "up": {"uv": [0, 0, 16, 8], "texture": "#sprite_b", "rotation": 90},
-                "down": {"uv": [0, 0, 16, 8], "texture": "#sprite_b", "rotation": 90},
-                "north": {"uv": [8, 8, 16, 16], "texture": "#sprite_a"},
-                "south": {"uv": [8, 8, 16, 16], "texture": "#sprite_a"},
-                "east": {"uv": [0, 8, 16, 16], "texture": "#sprite_b"},
-                "west": {"uv": [0, 8, 16, 16], "texture": "#sprite_b"}
-            }
-        },
-        {
-            "comment": "Top Tank",
-            "from": [8, 8, 0],
             "to": [16, 16, 16],
             "faces": {
                 "up": {"uv": [0, 0, 16, 8], "texture": "#sprite_b", "rotation": 90},

@@ -71,8 +71,8 @@ public class BCEnergy {
     private static void registerMigrations() {
         /** 7.99.0 */
         // Fluid registration changed from "fluid_block_[FLUID]" to "fluid_block_heat_[HEAT]_[FLUID]"
-        MigrationManager.INSTANCE.addBlockMigration(BCEnergyFluids.crudeOil[0].getBlock(), "fluid_block_oil");
-        MigrationManager.INSTANCE.addBlockMigration(BCEnergyFluids.fuelLight[0].getBlock(), "fluid_block_fuel");
+        MigrationManager.INSTANCE.addBlockMigration(BCEnergyFluids.oil.getBlock(), "fluid_block_oil");
+        MigrationManager.INSTANCE.addBlockMigration(BCEnergyFluids.fuel.getBlock(), "fluid_block_fuel");
     }
 
     static {

@@ -32,16 +32,8 @@ public class ChristmasHandler {
     private static void fmlPreInit() {
         enabled = BCEnergyConfig.christmasEventStatus.isEnabled(MonthDay.of(Month.DECEMBER, 25));
         if (isEnabled()) {
-            setColours(0xC0_75_34, 0x5A_1D_0c, BCEnergyFluids.crudeOil);
-            setColours(0xD4_82_39, 0xD8_7D_33, BCEnergyFluids.oilResidue);
-            setColours(0xD4_82_39, 0x5A_1D_0C, BCEnergyFluids.oilHeavy);
-            setColours(0xD4_82_39, 0x30_0E_05, BCEnergyFluids.oilDense);
-            setColours(0xC0_75_34, 0x8a_3D_1C, BCEnergyFluids.oilDistilled);
-            setColours(0x4F_33_2F, 0x30_0E_05, BCEnergyFluids.fuelDense);
-            setColours(0x88_44_2D, 0x5A_1d_0C, BCEnergyFluids.fuelMixedHeavy);
-            setColours(0x9B_61_39, 0x94_59_31, BCEnergyFluids.fuelLight);
-            setColours(0xC0_75_34, 0xB3_68_2C, BCEnergyFluids.fuelMixedLight);
-            setColours(0xD6_C9_90, 0xCF_BF_8E, BCEnergyFluids.fuelGaseous);
+            setColours(0x50_50_50, 0x05_05_05, BCEnergyFluids.oil);
+            setColours(0xFF_FF_30, 0xE4_CF_00, BCEnergyFluids.fuel);
         }
     }
 
@@ -60,16 +52,14 @@ public class ChristmasHandler {
         }
     }
 
-    private static void setColours(int lightColour, int darkColour, BCFluid[] fluids) {
-        if (fluids != null) {
-            for (BCFluid fluid : fluids) {
-                fluid.setColour(lightColour, darkColour);
-                if (fluid.isGaseous()) {
-                    fluid.setGaseous(false);
-                }
-                if (fluid.getDensity() < 0) {
-                    fluid.setDensity(-fluid.getDensity());
-                }
+    private static void setColours(int lightColour, int darkColour, BCFluid fluid) {
+        if (fluid != null) {
+            fluid.setColour(lightColour, darkColour);
+            if (fluid.isGaseous()) {
+                fluid.setGaseous(false);
+            }
+            if (fluid.getDensity() < 0) {
+                fluid.setDensity(-fluid.getDensity());
             }
         }
     }

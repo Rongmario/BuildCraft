@@ -4,13 +4,10 @@
  * distributed with this file, You can obtain one at https://mozilla.org/MPL/2.0/. */
 package buildcraft.core;
 
-import buildcraft.api.items.FluidItemDrops;
-
 import buildcraft.lib.BCLib;
 import buildcraft.lib.item.ItemBC_Neptune;
 import buildcraft.lib.registry.RegistrationHelper;
 
-import buildcraft.core.item.ItemFragileFluidContainer;
 import buildcraft.core.item.ItemGoggles;
 import buildcraft.core.item.ItemList_BC8;
 import buildcraft.core.item.ItemMapLocation;
@@ -34,7 +31,6 @@ public class BCCoreItems {
     public static ItemMapLocation mapLocation;
     public static ItemMarkerConnector markerConnector;
     public static ItemVolumeBox volumeBox;
-    public static ItemFragileFluidContainer fragileFluidShard;
     public static ItemGoggles goggles;
 
     public static void preInit() {
@@ -49,10 +45,8 @@ public class BCCoreItems {
         mapLocation = HELPER.addItem(new ItemMapLocation("item.map_location"));
         markerConnector = HELPER.addItem(new ItemMarkerConnector("item.marker_connector"));
         volumeBox = HELPER.addItem(new ItemVolumeBox("item.volume_box"));
-        fragileFluidShard = HELPER.addItem(new ItemFragileFluidContainer("item.fragile_fluid_shard"));
         if (BCLib.DEV) {
             goggles = HELPER.addItem(new ItemGoggles("item.goggles"));
         }
-        FluidItemDrops.item = fragileFluidShard;
     }
 }

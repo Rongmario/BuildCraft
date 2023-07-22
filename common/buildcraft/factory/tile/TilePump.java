@@ -267,7 +267,7 @@ public class TilePump extends TileMiner {
 
     private static boolean isOil(Fluid queueFluid) {
         if (BCModules.ENERGY.isLoaded()) {
-            return FluidUtilBC.areFluidsEqual(queueFluid, BCEnergyFluids.crudeOil[0]);
+            return FluidUtilBC.areFluidsEqual(queueFluid, BCEnergyFluids.oil);
         }
         return false;
     }

@@ -28,9 +28,7 @@ import buildcraft.lib.recipe.AssemblyRecipeRegistry;
 
 import buildcraft.core.compat.module.jei.energy.combustionengine.CategoryCombustionEngine;
 import buildcraft.core.compat.module.jei.energy.combustionengine.HandlerCombustionEngine;
-import buildcraft.core.compat.module.jei.factory.CategoryCoolable;
 import buildcraft.core.compat.module.jei.factory.CategoryDistiller;
-import buildcraft.core.compat.module.jei.factory.CategoryHeatable;
 import buildcraft.core.compat.module.jei.factory.HandlerDistiller;
 import buildcraft.core.compat.module.jei.recipe.GuiHandlerBuildCraft;
 import buildcraft.core.compat.module.jei.silicon.CategoryAssemblyTable;
@@ -60,23 +58,15 @@ public class BCPluginJEI implements IModPlugin {
         boolean factory = BCModules.FACTORY.isLoaded();
         boolean energy = BCModules.ENERGY.isLoaded();
         boolean silicon = BCModules.SILICON.isLoaded();
-//        boolean robotics = BCModules.ROBOTICS.isLoaded();
 
         if (factory) {
-            //registry.handleRecipes(IRefineryRecipeManager.ICoolableRecipe.class, new HandlerCoolable(), CategoryCoolable.UID);
             registry.handleRecipes(IRefineryRecipeManager.IDistillationRecipe.class, new HandlerDistiller(), CategoryDistiller.UID);
-            //registry.handleRecipes(IRefineryRecipeManager.IHeatableRecipe.class, new HandlerHeatable(), CategoryHeatable.UID);
 
-            //registry.addRecipes(ImmutableList.copyOf(BuildcraftRecipeRegistry.refineryRecipes.getCoolableRegistry().getAllRecipes()), CategoryCoolable.UID);
             registry.addRecipes(ImmutableList.copyOf(BuildcraftRecipeRegistry.refineryRecipes.getDistillationRegistry().getAllRecipes()), CategoryDistiller.UID);
-            //registry.addRecipes(ImmutableList.copyOf(BuildcraftRecipeRegistry.refineryRecipes.getHeatableRegistry().getAllRecipes()), CategoryHeatable.UID);
             if (BCBlocks.Factory.DISTILLER != null) {
                 registry.addRecipeCatalyst(new ItemStack(BCBlocks.Factory.DISTILLER), CategoryDistiller.UID);
             }
-            if (BCBlocks.Factory.HEAT_EXCHANGE != null) {
-                //registry.addRecipeCatalyst(new ItemStack(BCBlocks.Factory.HEAT_EXCHANGE), CategoryCoolable.UID);
-                //registry.addRecipeCatalyst(new ItemStack(BCBlocks.Factory.HEAT_EXCHANGE), CategoryHeatable.UID);
-            }
+
         }
         if (energy) {
             registry.handleRecipes(IFuel.class, new HandlerCombustionEngine(), CategoryCombustionEngine.UID);
@@ -132,9 +122,7 @@ public class BCPluginJEI implements IModPlugin {
 //        }
         if (factory) {
             lst.add("factory");
-            registry.addRecipeCategories(new CategoryHeatable(helper));
             registry.addRecipeCategories(new CategoryDistiller(helper));
-            registry.addRecipeCategories(new CategoryCoolable(helper));
         }
         if (energy) {
             lst.add("energy");

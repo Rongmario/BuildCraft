@@ -28,7 +28,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import buildcraft.api.core.IFluidFilter;
 import buildcraft.api.core.IFluidHandlerAdv;
-import buildcraft.api.items.FluidItemDrops;
 
 import buildcraft.lib.misc.FluidUtilBC;
 import buildcraft.lib.net.PacketBufferBC;
@@ -52,10 +51,6 @@ public class TankManager extends ForwardingList<Tank> implements IFluidHandlerAd
 
     public void addAll(Tank... values) {
         Collections.addAll(this, values);
-    }
-
-    public void addDrops(NonNullList<ItemStack> toDrop) {
-        FluidItemDrops.addFluidDrops(toDrop, toArray(new Tank[0]));
     }
 
     public boolean onActivated(EntityPlayer player, BlockPos pos, EnumHand hand) {

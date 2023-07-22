@@ -173,20 +173,6 @@ public class PipeFlowFluids extends PipeFlow implements IFlowFluid, IDebuggable 
         return super.getCapability(capability, facing);
     }
 
-    @Override
-    public void addDrops(NonNullList<ItemStack> toDrop, int fortune) {
-        super.addDrops(toDrop, fortune);
-        if (currentFluid != null && BCCoreItems.fragileFluidShard != null) {
-            int totalAmount = 0;
-            for (EnumPipePart part : EnumPipePart.VALUES) {
-                totalAmount += sections.get(part).amount;
-            }
-            if (totalAmount > 0) {
-                BCCoreItems.fragileFluidShard.addFluidDrops(toDrop, new FluidStack(currentFluid, totalAmount));
-            }
-        }
-    }
-
     public boolean doesContainFluid() {
         for (EnumPipePart part : EnumPipePart.VALUES) {
             if (sections.get(part).amount > 0) {

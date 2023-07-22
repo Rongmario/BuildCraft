@@ -34,7 +34,7 @@ import buildcraft.lib.tile.item.ItemHandlerSimple;
 
 public abstract class TileLaserTableBase extends TileBC_Neptune implements ILaserTarget, ITickable, IDebuggable {
     private static final long MJ_FLOW_ROUND = MjAPI.MJ / 10;
-    private final AverageLong avgPower = new AverageLong(120);
+    private final AverageLong avgPower = new AverageLong(30);
     public long avgPowerClient;
     public long power;
 
@@ -46,7 +46,7 @@ public abstract class TileLaserTableBase extends TileBC_Neptune implements ILase
 
     @Override
     public long getRequiredLaserPower() {
-        return getTarget() - power;
+        return Math.max(0, getTarget() - power);
     }
 
     @Override
@@ -65,12 +65,8 @@ public abstract class TileLaserTableBase extends TileBC_Neptune implements ILase
     @Override
     public void update() {
         avgPower.tick();
-        if (world.isRemote) {
-            return;
-        }
-
         if (getTarget() <= 0) {
-            power = 0;
+            //power = 0;
             avgPower.clear();
         }
     }
@@ -96,10 +92,12 @@ public abstract class TileLaserTableBase extends TileBC_Neptune implements ILase
                 buffer.writeLong(power);
                 double avg = avgPower.getAverage();
                 long pwrAvg = Math.round(avg);
-                long div = pwrAvg / MJ_FLOW_ROUND;
-                long mod = pwrAvg % MJ_FLOW_ROUND;
-                int mj = (int) (div) + ((mod > MJ_FLOW_ROUND / 2) ? 1 : 0);
-                buffer.writeInt(mj);
+                int rf = (int) pwrAvg / 100_000;
+                if (getTarget() <= 0) {
+                    avgPower.clear();
+                    rf = 0;
+                }
+                buffer.writeInt(rf);
             }
         }
     }

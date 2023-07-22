@@ -2,17 +2,14 @@ package buildcraft.core.compat.module.jei.silicon;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import buildcraft.api.recipes.IngredientStack;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import crafttweaker.api.item.IngredientItem;
 import mezz.jei.api.ingredients.VanillaTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -59,8 +56,8 @@ public class WrapperIntegrationTable implements IRecipeWrapper {
         this.output = recipe.getOutput();
 
         ResourceLocation backgroundLocation = new ResourceLocation("buildcraftsilicon", "textures/gui/integration_table.png");
-        IDrawableStatic progressDrawable = guiHelper.createDrawable(backgroundLocation, 176, 17, 4, 69, 0, 0, 0, 0);
-        this.progressBar = guiHelper.createAnimatedDrawable(progressDrawable, (int) (recipe.getRequiredMicroJoules() /  720), IDrawableAnimated.StartDirection.BOTTOM, false);
+        IDrawableStatic progressDrawable = guiHelper.createDrawable(backgroundLocation, 176, 3, 4, 70, 0, 0, 0, 0);
+        this.progressBar = guiHelper.createAnimatedDrawable(progressDrawable, (int) Math.max(10, recipe.getRequiredMicroJoules() / MjAPI.MJ / 50), IDrawableAnimated.StartDirection.BOTTOM, false);
     }
 
     @Override
@@ -73,8 +70,8 @@ public class WrapperIntegrationTable implements IRecipeWrapper {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        this.progressBar.draw(minecraft, 156, 1);
-        minecraft.fontRenderer.drawString(MjAPI.formatRFFromMj(this.recipe.getRequiredMicroJoules()) + " RF", 80, 52, Color.gray.getRGB());
+        this.progressBar.draw(minecraft, 156, 5);
+        minecraft.fontRenderer.drawString(MjAPI.formatRFFromMj(this.recipe.getRequiredMicroJoules()) + " RF", 81, 5, Color.gray.getRGB());
     }
 
     @Override

@@ -25,32 +25,11 @@ public enum RefineryRecipeRegistry implements IRefineryRecipeManager {
     INSTANCE;
 
     public final IRefineryRegistry<IDistillationRecipe> distillationRegistry = new SingleRegistry<>();
-    public final IRefineryRegistry<IHeatableRecipe> heatableRegistry = new SingleRegistry<>();
-    public final IRefineryRegistry<ICoolableRecipe> coolableRegistry = new SingleRegistry<>();
+
 
     @Override
-    public IHeatableRecipe createHeatingRecipe(FluidStack in, FluidStack out, int heatFrom, int heatTo) {
-        return new HeatableRecipe(in, out, heatFrom, heatTo);
-    }
-
-    @Override
-    public ICoolableRecipe createCoolableRecipe(FluidStack in, FluidStack out, int heatFrom, int heatTo) {
-        return new CoolableRecipe(in, out, heatFrom, heatTo);
-    }
-
-    @Override
-    public IDistillationRecipe createDistillationRecipe(FluidStack in, FluidStack outGas, FluidStack outLiquid, long powerRequired) {
-        return new DistillationRecipe(powerRequired, in, outGas, outLiquid);
-    }
-
-    @Override
-    public IRefineryRegistry<IHeatableRecipe> getHeatableRegistry() {
-        return heatableRegistry;
-    }
-
-    @Override
-    public IRefineryRegistry<ICoolableRecipe> getCoolableRegistry() {
-        return coolableRegistry;
+    public IDistillationRecipe createDistillationRecipe(FluidStack in, FluidStack outLiquid, long powerRequired) {
+        return new DistillationRecipe(powerRequired, in, outLiquid);
     }
 
     @Override
@@ -129,19 +108,13 @@ public enum RefineryRecipeRegistry implements IRefineryRecipeManager {
     }
 
     public static class DistillationRecipe extends RefineryRecipe implements IDistillationRecipe {
-        private final FluidStack outGas, outLiquid;
+        private final FluidStack outLiquid;
         private final long powerRequired;
 
-        public DistillationRecipe(long powerRequired, FluidStack in, FluidStack outGas, FluidStack outLiquid) {
+        public DistillationRecipe(long powerRequired, FluidStack in, FluidStack outLiquid) {
             super(in);
             this.powerRequired = powerRequired;
-            this.outGas = outGas;
             this.outLiquid = outLiquid;
-        }
-
-        @Override
-        public FluidStack outGas() {
-            return outGas;
         }
 
         @Override
@@ -152,45 +125,6 @@ public enum RefineryRecipeRegistry implements IRefineryRecipeManager {
         @Override
         public long powerRequired() {
             return powerRequired;
-        }
-    }
-
-    public static abstract class HeatExchangeRecipe extends RefineryRecipe implements IHeatExchangerRecipe {
-        private final FluidStack out;
-        private final int heatFrom, heatTo;
-
-        public HeatExchangeRecipe(FluidStack in, FluidStack out, int heatFrom, int heatTo) {
-            super(in);
-            this.out = out;
-            this.heatFrom = heatFrom;
-            this.heatTo = heatTo;
-        }
-
-        @Override
-        public FluidStack out() {
-            return out;
-        }
-
-        @Override
-        public int heatFrom() {
-            return heatFrom;
-        }
-
-        @Override
-        public int heatTo() {
-            return heatTo;
-        }
-    }
-
-    public static class HeatableRecipe extends HeatExchangeRecipe implements IHeatableRecipe {
-        public HeatableRecipe(FluidStack in, FluidStack out, int heatFrom, int heatTo) {
-            super(in, out, heatFrom, heatTo);
-        }
-    }
-
-    public static class CoolableRecipe extends HeatExchangeRecipe implements ICoolableRecipe {
-        public CoolableRecipe(FluidStack in, FluidStack out, int heatFrom, int heatTo) {
-            super(in, out, heatFrom, heatTo);
         }
     }
 }

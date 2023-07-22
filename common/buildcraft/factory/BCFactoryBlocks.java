@@ -12,17 +12,14 @@ import buildcraft.factory.block.BlockAutoWorkbenchItems;
 import buildcraft.factory.block.BlockChute;
 import buildcraft.factory.block.BlockDistiller;
 import buildcraft.factory.block.BlockFloodGate;
-import buildcraft.factory.block.BlockHeatExchange;
 import buildcraft.factory.block.BlockMiningWell;
 import buildcraft.factory.block.BlockPump;
 import buildcraft.factory.block.BlockTank;
 import buildcraft.factory.block.BlockTube;
-import buildcraft.factory.block.BlockWaterGel;
 import buildcraft.factory.tile.TileAutoWorkbenchItems;
 import buildcraft.factory.tile.TileChute;
 import buildcraft.factory.tile.TileDistiller_BC8;
 import buildcraft.factory.tile.TileFloodGate;
-import buildcraft.factory.tile.TileHeatExchange;
 import buildcraft.factory.tile.TileMiningWell;
 import buildcraft.factory.tile.TilePump;
 import buildcraft.factory.tile.TileTank;
@@ -39,10 +36,6 @@ public class BCFactoryBlocks {
     public static BlockTank tank;
     public static BlockChute chute;
     public static BlockDistiller distiller;
-    public static BlockHeatExchange heatExchange;
-
-    // public static BlockAutoWorkbenchFluids autoWorkbenchFluids;
-    public static BlockWaterGel waterGel;
 
     public static void fmlPreInit() {
         autoWorkbenchItems = HELPER.addBlockAndItem(new BlockAutoWorkbenchItems(Material.ROCK, "block.autoworkbench.item"));
@@ -53,8 +46,6 @@ public class BCFactoryBlocks {
         tank = HELPER.addBlockAndItem(new BlockTank(Material.IRON, "block.tank"));
         chute = HELPER.addBlockAndItem(new BlockChute(Material.IRON, "block.chute"));
         distiller = HELPER.addBlockAndItem(new BlockDistiller(Material.IRON, "block.distiller"));
-        heatExchange = HELPER.addBlockAndItem(new BlockHeatExchange(Material.IRON, "block.heat_exchange"));
-        waterGel = HELPER.addBlock(new BlockWaterGel(Material.CLAY, "block.water_gel"));
 
         HELPER.registerTile(TileAutoWorkbenchItems.class, "tile.autoworkbench.item");
         HELPER.registerTile(TileMiningWell.class, "tile.mining_well");
@@ -63,6 +54,5 @@ public class BCFactoryBlocks {
         HELPER.registerTile(TileTank.class, "tile.tank");
         HELPER.registerTile(TileChute.class, "tile.chute");
         HELPER.registerTile(TileDistiller_BC8.class, "tile.distiller");
-        HELPER.registerTile(TileHeatExchange.class, "tile.heat_exchange");
     }
 }

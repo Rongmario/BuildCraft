@@ -6,6 +6,7 @@
 
 package buildcraft.energy.container;
 
+import buildcraft.lib.gui.slot.SlotBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
@@ -18,22 +19,21 @@ import buildcraft.energy.tile.TileEngineIron_BC8;
 public class ContainerEngineIron_BC8 extends ContainerBCTile<TileEngineIron_BC8> {
     public final WidgetFluidTank widgetTankFuel;
     public final WidgetFluidTank widgetTankCoolant;
-    public final WidgetFluidTank widgetTankResidue;
 
     public ContainerEngineIron_BC8(EntityPlayer player, TileEngineIron_BC8 engine) {
         super(player, engine);
 
-        addFullPlayerInventory(95);
+        addFullPlayerInventory(84);
+        addSlotToContainer(new SlotBase(engine.invFuel, 0, 52, 41));
 
         widgetTankFuel = addWidget(new WidgetFluidTank(this, engine.tankFuel));
         widgetTankCoolant = addWidget(new WidgetFluidTank(this, engine.tankCoolant));
-        widgetTankResidue = addWidget(new WidgetFluidTank(this, engine.tankResidue));
     }
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int index) {
         // The only slots are player slots -- try to interact with all of the tanks
-
+/*
         if (!player.world.isRemote) {
             Slot slot = inventorySlots.get(index);
             ItemStack stack = slot.getStack();
@@ -50,13 +50,7 @@ public class ContainerEngineIron_BC8 extends ContainerBCTile<TileEngineIron_BC8>
                 detectAndSendChanges();
                 return ItemStack.EMPTY;
             }
-            stack = tile.tankResidue.transferStackToTank(this, stack);
-            if (!ItemStack.areItemStacksEqual(stack, original)) {
-                slot.putStack(stack);
-                detectAndSendChanges();
-                return ItemStack.EMPTY;
-            }
-        }
+        }*/
 
         return super.transferStackInSlot(player, index);
     }

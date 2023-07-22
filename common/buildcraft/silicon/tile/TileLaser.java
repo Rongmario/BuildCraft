@@ -116,9 +116,9 @@ public class TileLaser extends TileBC_Neptune implements ITickable, IDebuggable,
         EnumFacing face = state.getValue(BuildCraftProperties.BLOCK_FACING_6);
 
         VolumeUtil.iterateCone(world, pos, face, TARGETING_RANGE, true, (w, s, p, visible) -> {
-            if (!visible) {
-                return;
-            }
+            //if (!visible) {
+            //    return;
+            //}
             IBlockState stateAt = world.getBlockState(p);
             if (stateAt.getBlock() instanceof ILaserTargetBlock) {
                 TileEntity tileAt = world.getTileEntity(p);
@@ -185,6 +185,8 @@ public class TileLaser extends TileBC_Neptune implements ITickable, IDebuggable,
         return 4 * MjAPI.MJ;
     }
 
+    private int ct;
+
     @Override
     public void update() {
         if (world.isRemote) {
@@ -194,12 +196,13 @@ public class TileLaser extends TileBC_Neptune implements ITickable, IDebuggable,
             }
             return;
         }
+        ct++;
 
         // set target tile on server side
         avgPower.tick();
 
         BlockPos previousTargetPos = targetPos;
-        if (worldHasUpdated) {
+        if (worldHasUpdated || ct % 20 == 0) {
             findPossibleTargets();
             worldHasUpdated = false;
         }
@@ -228,9 +231,7 @@ public class TileLaser extends TileBC_Neptune implements ITickable, IDebuggable,
             avgPower.clear();
         }
 
-        if (!Objects.equals(previousTargetPos, targetPos) || true) {
-            sendNetworkUpdate(NET_RENDER_DATA);
-        }
+        sendNetworkUpdate(NET_RENDER_DATA);
 
         markChunkDirty();
     }

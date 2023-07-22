@@ -55,7 +55,7 @@ public abstract class OilGenStructure {
     }
 
     public static void setOil(World world, BlockPos pos) {
-        world.setBlockState(pos, BCEnergyFluids.crudeOil[0].getBlock().getDefaultState(), 2);
+        world.setBlockState(pos, BCEnergyFluids.oil.getBlock().getDefaultState(), 2);
     }
 
     public enum ReplaceType {

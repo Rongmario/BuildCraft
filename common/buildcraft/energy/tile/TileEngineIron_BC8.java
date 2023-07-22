@@ -10,15 +10,25 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
+import buildcraft.energy.BCEnergyFluids;
+import buildcraft.lib.fluid.FluidManager;
+import buildcraft.lib.tile.item.ItemHandlerManager;
+import buildcraft.lib.tile.item.ItemHandlerSimple;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 
-import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fluids.capability.templates.FluidHandlerItemStack;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
@@ -66,33 +76,83 @@ public class TileEngineIron_BC8 extends TileEngineBase_BC8 {
             return new FluidGetResult(StackUtil.EMPTY, fluidCoolant);
         }
     };
-    public final Tank tankResidue = new Tank("residue", MAX_FLUID, this, this::isResidue);
     private final IFluidHandlerAdv fluidHandler = new InternalFluidHandler();
 
     private int penaltyCooling = 0;
     private boolean lastPowered = false;
     private double burnTime;
-    private double residueAmount = 0;
     private IFuel currentFuel;
 
+    public final ItemHandlerSimple invFuel;
+
+
     public TileEngineIron_BC8() {
-        tankManager.addAll(tankFuel, tankCoolant, tankResidue);
 
-        // TODO: Auto list of example fuels!
-        tankFuel.helpInfo = new ElementHelpInfo(tankFuel.helpInfo.title, 0xFF_FF_33_33, Tank.DEFAULT_HELP_KEY, null,
-            "buildcraft.help.tank.fuel");
+        invFuel = itemManager.addInvHandler("fuel", 1, this::isValidFuel, ItemHandlerManager.EnumAccess.BOTH, EnumPipePart.VALUES);
 
-        // TODO: Auto list of example coolants!
-        tankCoolant.helpInfo = new ElementHelpInfo(tankCoolant.helpInfo.title, 0xFF_55_55_FF, Tank.DEFAULT_HELP_KEY,
-            null, "buildcraft.help.tank.coolant");
-
-        tankResidue.helpInfo = new ElementHelpInfo(tankResidue.helpInfo.title, 0xFF_AA_33_AA, Tank.DEFAULT_HELP_KEY,
-            null, "buildcraft.help.tank.residue");
+        tankManager.addAll(tankFuel, tankCoolant);
 
         caps.addCapabilityInstance(CapUtil.CAP_FLUIDS, fluidHandler, EnumPipePart.VALUES);
     }
 
-    // TileEntity overrides
+    private boolean isValidFuel(int slot, ItemStack stack) {
+        if (stack.getItem() == ItemBlock.getItemFromBlock(Blocks.ICE) || stack.getItem() == ItemBlock.getItemFromBlock(Blocks.PACKED_ICE)) return true;
+        if (stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+            IFluidHandlerItem cap = stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
+            FluidStack toDrain = cap.drain(1000, false);
+            return isValidFuel(toDrain) || isValidCoolant(toDrain);
+        }
+        return false;
+    }
+
+    @Override
+    public void update() {
+        super.update();
+
+        if (!world.isRemote) {
+            ItemStack stack = invFuel.getStackInSlot(0);
+            boolean update = false;
+            if (stack.getItem() == Items.WATER_BUCKET) {
+                FluidStack water = new FluidStack(FluidRegistry.WATER, 1000);
+                if (tankCoolant.fill(water, false) == water.amount) {
+                    tankCoolant.fill(water, true);
+                    invFuel.setStackInSlot(0, new ItemStack(Items.BUCKET));
+                    update = true;
+                }
+            }
+            if (isValidFuel(FluidUtil.getFluidContained(stack))) {
+                FluidStack fuel = FluidUtil.getFluidContained(stack);
+                if (FluidUtil.getFilledBucket(new FluidStack(fuel.getFluid(), Fluid.BUCKET_VOLUME)).isItemEqual(stack)) {
+                    if (tankFuel.fill(fuel, false) == fuel.amount) {
+                        tankFuel.fill(fuel, true);
+                        invFuel.setStackInSlot(0, new ItemStack(Items.BUCKET));
+                        update = true;
+                    }
+                }
+            }
+            if (stack.getCount() > 0) {
+                FluidStack water = new FluidStack(FluidRegistry.WATER, 0);
+                if (stack.getItem() == ItemBlock.getItemFromBlock(Blocks.ICE)) {
+                    water.amount = 1000;
+                } else if (stack.getItem() == ItemBlock.getItemFromBlock(Blocks.PACKED_ICE)) {
+                    water.amount = 3000;
+                }
+                if (water.amount > 0) {
+                    if (tankCoolant.fill(water, false) == water.amount) {
+                        tankCoolant.fill(water, true);
+                        invFuel.extractItem(0, 1, false);
+                        update = true;
+                    }
+                }
+            }
+            if (update) {
+                sendNetworkGuiUpdate(NET_GUI_DATA);
+                sendNetworkGuiUpdate(NET_GUI_TICK);
+            }
+        }
+    }
+
+        // TileEntity overrides
 
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
@@ -203,20 +263,6 @@ public class TileEngineIron_BC8 extends TileEngineBase_BC8 {
                         if (fuel.amount > 0) {
                             fuel.amount--;
                             burnTime += currentFuel.getTotalBurningTime() / 1000.0;
-
-                            // If we also produce residue then put it out too
-                            if (currentFuel instanceof IDirtyFuel) {
-                                IDirtyFuel dirtyFuel = (IDirtyFuel) currentFuel;
-                                FluidStack residueFluid = dirtyFuel.getResidue().copy();
-                                residueAmount += residueFluid.amount / 1000.0;
-                                if (residueAmount >= 1) {
-                                    residueFluid.amount = MathHelper.floor(residueAmount);
-                                    residueAmount -= tankResidue.fill(residueFluid, true);
-                                } else if (tankResidue.getFluid() == null) {
-                                    residueFluid.amount = 0;
-                                    tankResidue.setFluid(residueFluid);
-                                }
-                            }
                         } else {
                             tankFuel.setFluid(null);
                             currentFuel = null;
@@ -347,22 +393,10 @@ public class TileEngineIron_BC8 extends TileEngineBase_BC8 {
         return BuildcraftFuelRegistry.coolant.getCoolant(fluid) != null;
     }
 
-    private boolean isResidue(FluidStack fluid) {
-        // If this is the client then we don't have a current fuel- just trust the server that its correct
-        if (world != null && world.isRemote) {
-            return true;
-        }
-        if (currentFuel instanceof IDirtyFuel) {
-            return fluid.isFluidEqual(((IDirtyFuel) currentFuel).getResidue());
-        }
-        return false;
-    }
-
     private class InternalFluidHandler implements IFluidHandlerAdv {
         private final IFluidTankProperties[] properties = { //
             new TankProperties(tankFuel, true, false), //
             new TankProperties(tankCoolant, true, false), //
-            new TankProperties(tankResidue, false, true),//
         };
 
         @Override
@@ -381,17 +415,17 @@ public class TileEngineIron_BC8 extends TileEngineBase_BC8 {
 
         @Override
         public FluidStack drain(FluidStack resource, boolean doDrain) {
-            return tankResidue.drain(resource, doDrain);
+            return null;
         }
 
         @Override
         public FluidStack drain(int maxDrain, boolean doDrain) {
-            return tankResidue.drain(maxDrain, doDrain);
+            return null;
         }
 
         @Override
         public FluidStack drain(IFluidFilter filter, int maxDrain, boolean doDrain) {
-            return tankResidue.drain(filter, maxDrain, doDrain);
+            return null;
         }
     }
 }

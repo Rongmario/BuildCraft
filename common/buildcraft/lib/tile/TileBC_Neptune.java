@@ -302,7 +302,6 @@ public abstract class TileBC_Neptune extends TileEntity implements IPayloadRecei
     /** Called whenever {@link #onRemove()} is called (by default). */
     public void addDrops(NonNullList<ItemStack> toDrop, int fortune) {
         itemManager.addDrops(toDrop);
-        tankManager.addDrops(toDrop);
     }
 
     public void onPlacedBy(EntityLivingBase placer, ItemStack stack) {

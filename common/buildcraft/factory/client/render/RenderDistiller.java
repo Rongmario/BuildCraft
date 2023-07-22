@@ -49,10 +49,9 @@ public class RenderDistiller extends TileEntitySpecialRenderer<TileDistiller_BC8
 
     static {
         EnumFacing face = EnumFacing.WEST;
-        TankSize tankIn = new TankSize(0, 0, 4, 8, 16, 12).shrink(1 / 64.0);
-        TankSize tankGasOut = new TankSize(8, 8, 0, 16, 16, 16).shrink(1 / 64.0);
-        TankSize tankLiquidOut = new TankSize(8, 0, 0, 16, 8, 16).shrink(1 / 64.0);
-        TankRenderSizes sizes = new TankRenderSizes(tankIn, tankGasOut, tankLiquidOut);
+        TankSize tankLiquidOut = new TankSize(0, 0, 4, 8, 16, 12).shrink(1 / 64.0);
+        TankSize tankIn = new TankSize(8, 0, 0, 16, 16, 16).shrink(1 / 64.0);
+        TankRenderSizes sizes = new TankRenderSizes(tankIn, tankLiquidOut);
         for (int i = 0; i < 4; i++) {
             TANK_SIZES.put(face, sizes);
             face = face.rotateY();
@@ -115,7 +114,6 @@ public class RenderDistiller extends TileEntitySpecialRenderer<TileDistiller_BC8
             profiler.endStartSection("fluid");
 
             renderTank(sizes.tankIn, tile.smoothedTankIn, combinedLight, partialTicks, bb);
-            renderTank(sizes.tankOutGas, tile.smoothedTankGasOut, combinedLight, partialTicks, bb);
             renderTank(sizes.tankOutLiquid, tile.smoothedTankLiquidOut, combinedLight, partialTicks, bb);
 
             // buffer finish
@@ -146,47 +144,16 @@ public class RenderDistiller extends TileEntitySpecialRenderer<TileDistiller_BC8
     }
 
     static class TankRenderSizes {
-        final TankSize tankIn, tankOutGas, tankOutLiquid;
+        final TankSize tankIn, tankOutLiquid;
 
-        public TankRenderSizes(TankSize tankIn, TankSize tankOutGas, TankSize tankOutLiquid) {
+        public TankRenderSizes(TankSize tankIn, TankSize tankOutLiquid) {
             this.tankIn = tankIn;
-            this.tankOutGas = tankOutGas;
             this.tankOutLiquid = tankOutLiquid;
         }
 
         public TankRenderSizes rotateY() {
-            return new TankRenderSizes(tankIn.rotateY(), tankOutGas.rotateY(), tankOutLiquid.rotateY());
+            return new TankRenderSizes(tankIn.rotateY(), tankOutLiquid.rotateY());
         }
     }
 
-    static class Size {
-        final Vec3d min, max;
-
-        public Size(int sx, int sy, int sz, int ex, int ey, int ez) {
-            this(new Vec3d(sx, sy, sz).scale(1 / 16.0), new Vec3d(ex, ey, ez).scale(1 / 16.0));
-        }
-
-        public Size(Vec3d min, Vec3d max) {
-            this.min = min;
-            this.max = max;
-        }
-
-        public Size shrink(double by) {
-            return new Size(min.addVector(by, by, by), max.subtract(by, by, by));
-        }
-
-        public Size rotateY() {
-            Vec3d _min = rotateY(min);
-            Vec3d _max = rotateY(max);
-            return new Size(VecUtil.min(_min, _max), VecUtil.max(_min, _max));
-        }
-
-        private static Vec3d rotateY(Vec3d vec) {
-            return new Vec3d(//
-                1 - vec.z, //
-                vec.y, //
-                vec.x//
-            );
-        }
-    }
 }

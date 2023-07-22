@@ -35,8 +35,6 @@ public class ItemBlockBC_Neptune extends ItemBlock implements IItemBuildCraft {
         String tipId = getUnlocalizedName(stack) + ".tip";
         if (LocaleUtil.canLocalize(tipId)) {
             tooltip.add(TextFormatting.GRAY + LocaleUtil.localize(tipId));
-        } else if (flags.isAdvanced()) {
-            tooltip.add(TextFormatting.GRAY + tipId);
         }
     }
 }

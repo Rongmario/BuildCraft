@@ -30,7 +30,7 @@ public class CategoryDistiller extends BlankRecipeCategory<WrapperDistiller> {
 
     @Override
     public String getTitle() {
-        return "Distillable Fluids";
+        return "Refinery";
     }
 
     @Override
@@ -45,10 +45,9 @@ public class CategoryDistiller extends BlankRecipeCategory<WrapperDistiller> {
 
     @Override
     public void drawExtras(Minecraft minecraft) {
-        this.background.draw(minecraft, 20, 4);
+        this.background.draw(minecraft, 18, 4);
         this.slot.draw(minecraft, 0, 25); // -20, 21);
-        this.slot.draw(minecraft, 56, 0); // 36, -4);
-        this.slot.draw(minecraft, 56, 45); // 36, 41);
+        this.slot.draw(minecraft, 54, 25); // 36, -4);
     }
 
 //    @Override
@@ -61,10 +60,7 @@ public class CategoryDistiller extends BlankRecipeCategory<WrapperDistiller> {
         guiFluidStacks.init(0, true, /*-19, 22*/ 1, 26, 16, 16, 10, false, null);
         guiFluidStacks.set(0, ingredients.getInputs(FluidStack.class).get(0));
 
-        guiFluidStacks.init(1, false, /*37, -3*/ 57, 1, 16, 16, 10, false, null);
+        guiFluidStacks.init(1, false, /*37, -3*/ 55, 26, 16, 16, 10, false, null);
         guiFluidStacks.set(1, ingredients.getOutputs(FluidStack.class).get(0));
-
-        guiFluidStacks.init(2, false, /*37, 42*/ 57, 46, 16, 16, 10, false, null);
-        guiFluidStacks.set(2, ingredients.getOutputs(FluidStack.class).get(1));
     }
 }

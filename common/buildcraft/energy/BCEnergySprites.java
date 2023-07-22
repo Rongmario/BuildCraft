@@ -26,27 +26,10 @@ public class BCEnergySprites {
     @SubscribeEvent
     public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
         TextureMap map = event.getMap();
+        map.setTextureEntry(new AtlasSpriteFluid(BCEnergyFluids.fuel.getStill().toString(), new ResourceLocation("buildcraftenergy:blocks/fluids/fuel_still"), BCEnergyFluids.fuel));
+        map.setTextureEntry(new AtlasSpriteFluid(BCEnergyFluids.fuel.getFlowing().toString(), new ResourceLocation("buildcraftenergy:blocks/fluids/fuel_flow"), BCEnergyFluids.fuel));
+        map.setTextureEntry(new AtlasSpriteFluid(BCEnergyFluids.oil.getStill().toString(), new ResourceLocation("buildcraftenergy:blocks/fluids/oil_still"), BCEnergyFluids.oil));
+        map.setTextureEntry(new AtlasSpriteFluid(BCEnergyFluids.oil.getFlowing().toString(), new ResourceLocation("buildcraftenergy:blocks/fluids/oil_flow"), BCEnergyFluids.oil));
 
-        if (!BCLibConfig.useSwappableSprites) {
-            for (BCFluid f : BCEnergyFluids.allFluids) {
-                // So this doesn't work properly as we don't have the sprites.
-                // but that's ok as we said that these don't work if disabled ~anyway~
-                map.registerSprite(f.getStill());
-                map.registerSprite(f.getFlowing());
-            }
-            return;
-        }
-
-        ResourceLocation[][] fromSprites = new ResourceLocation[3][2];
-        for (int h = 0; h < 3; h++) {
-            fromSprites[h][0] = new ResourceLocation("buildcraftenergy:blocks/fluids/heat_" + h + "_still");
-            fromSprites[h][1] = new ResourceLocation("buildcraftenergy:blocks/fluids/heat_" + h + "_flow");
-        }
-
-        for (BCFluid f : BCEnergyFluids.allFluids) {
-            ResourceLocation[] sprites = fromSprites[f.getHeatValue()];
-            map.setTextureEntry(new AtlasSpriteFluid(f.getStill().toString(), sprites[0], f));
-            map.setTextureEntry(new AtlasSpriteFluid(f.getFlowing().toString(), sprites[1], f));
-        }
     }
 }

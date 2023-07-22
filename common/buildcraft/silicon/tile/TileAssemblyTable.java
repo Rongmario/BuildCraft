@@ -7,13 +7,7 @@
 package buildcraft.silicon.tile;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 
 import javax.annotation.Nullable;
 
@@ -170,6 +164,7 @@ public class TileAssemblyTable extends TileLaserTableBase {
         return Optional.ofNullable(getActiveRecipe()).map(instruction -> instruction.recipe.getRequiredMicroJoulesFor(instruction.output)).orElse(0L);
     }
 
+    private long lastTarget = 0;
     @Override
     public void update() {
         super.update();
@@ -178,17 +173,23 @@ public class TileAssemblyTable extends TileLaserTableBase {
             return;
         }
 
+        if (getTarget() != lastTarget) {
+            lastTarget = getTarget();
+            sendNetworkGuiUpdate(NET_GUI_DATA);
+            sendNetworkGuiUpdate(NET_GUI_TICK);
+        }
+
         updateRecipes();
 
-        if (getTarget() > 0) {
+        if (lastTarget > 0) {
             AdvancementUtil.unlockAdvancement(getOwner().getId(), ADVANCEMENT);
-            if (power >= getTarget()) {
+            if (power >= lastTarget) {
                 AssemblyInstruction instruction = getActiveRecipe();
                 extract(inv, instruction.recipe.getInputsFor(instruction.output), false, false);
 
                 InventoryUtil.addToBestAcceptor(getWorld(), getPos(), null, instruction.output.copy());
 
-                power -= getTarget();
+                power -= lastTarget;
                 activateNextRecipe();
             }
             sendNetworkGuiUpdate(NET_GUI_DATA);
@@ -259,6 +260,7 @@ public class TileAssemblyTable extends TileLaserTableBase {
             if (recipesStates.containsKey(recipe)) {
                 recipesStates.put(recipe, state);
             }
+            createAndSendGuiMessage(NET_GUI_DATA, (buffer2) -> writePayload(NET_GUI_DATA, buffer2, Side.SERVER));
         }
     }
 

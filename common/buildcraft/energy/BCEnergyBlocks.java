@@ -27,7 +27,7 @@ public class BCEnergyBlocks {
             BCCoreBlocks.engine.registerEngine(EnumEngineType.IRON, TileEngineIron_BC8::new);
         }
 
-        EnumSpring.OIL.liquidBlock = BCEnergyFluids.crudeOil[0].getBlock().getDefaultState();
+        EnumSpring.OIL.liquidBlock = BCEnergyFluids.oil.getBlock().getDefaultState();
         EnumSpring.OIL.tileConstructor = TileSpringOil::new;
 
         HELPER.registerTile(TileSpringOil.class, "tile.spring.oil");

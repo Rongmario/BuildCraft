@@ -31,7 +31,7 @@ public class CategoryCombustionEngine extends BlankRecipeCategory<WrapperCombust
 
     @Override
     public String getTitle() {
-        return "Combustion Engine Fuels";
+        return "Combustion Engine";
     }
 
     @Override

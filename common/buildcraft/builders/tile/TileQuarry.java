@@ -103,7 +103,7 @@ public class TileQuarry extends TileBC_Neptune implements ITickable, IDebuggable
         = new ResourceLocation("buildcraftbuilders:diggy_diggy_hole");
 
     private final MjBattery battery = new MjBattery(24000 * MjAPI.MJ);
-    private final BCRfWrapper wrapper = new BCRfWrapper(battery);
+    private final BCRfWrapper wrapper = new BCRfWrapper(battery, 512);
     public final Box frameBox = new Box();
     private final Box miningBox = new Box();
     private BoxIterator boxIterator;

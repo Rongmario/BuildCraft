@@ -24,36 +24,11 @@ public class WrapperDistiller implements IRecipeWrapper {
     WrapperDistiller(IGuiHelper guiHelper, IRefineryRecipeManager.IDistillationRecipe recipe) {
         this.recipe = recipe;
         this.in = ImmutableList.of(recipe.in());
-        this.out = ImmutableList.of(recipe.outGas(), recipe.outLiquid());
+        this.out = ImmutableList.of(recipe.outLiquid());
 
         IDrawableStatic overComplete = guiHelper.createDrawable(CategoryDistiller.distillerBackground, 212, 0, 36, 57);
         this.animated = guiHelper.createAnimatedDrawable(overComplete, /*recipe.ticks() * 20*/ 40, IDrawableAnimated.StartDirection.LEFT, false);
     }
-
-//    @Override
-//    public List getInputs() {
-//        return Collections.emptyList();
-//    }
-//
-//    @Override
-//    public List getOutputs() {
-//        return Collections.emptyList();
-//    }
-//
-//    @Override
-//    public List<FluidStack> getFluidInputs() {
-//        return in;
-//    }
-//
-//    @Override
-//    public List<FluidStack> getFluidOutputs() {
-//        return out;
-//    }
-//
-//    @Override
-//    public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight) {}
-
-
     @Override
     public void getIngredients(IIngredients ingredients) {
         ingredients.setInputs(FluidStack.class, this.in);
@@ -63,14 +38,9 @@ public class WrapperDistiller implements IRecipeWrapper {
     @Override
     @SideOnly(Side.CLIENT)
     public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
-        this.animated.draw(minecraft, 20, 4);
-        minecraft.fontRenderer.drawString(MjAPI.formatRFFromMj(recipe.powerRequired()) + " RF", 58, 28, Color.GRAY.getRGB());
+        this.animated.draw(minecraft, 18, 4);
+        minecraft.fontRenderer.drawString(MjAPI.formatRFFromMj(recipe.powerRequired()) + " RF", 21, 18, Color.GRAY.getRGB());
     }
-
-//    @Override
-//    public void drawAnimations(Minecraft minecraft, int recipeWidth, int recipeHeight) {
-//        animated.draw(minecraft, 0, 0);
-//    }
 
     @Override
     public List<String> getTooltipStrings(int mouseX, int mouseY) {

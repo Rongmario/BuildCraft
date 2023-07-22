@@ -19,24 +19,11 @@ public class BCFluid extends Fluid {
     private boolean isFlammable = false;
     private int lightOpacity = 0;
     private MapColor mapColour = MapColor.BLACK;
-    private int heat;
-    private boolean heatable;
     private String blockName;
 
     public BCFluid(String fluidName, ResourceLocation still, ResourceLocation flowing) {
         super(fluidName, still, flowing);
         blockName = fluidName;
-    }
-
-    public String getBareLocalizedName(FluidStack stack) {
-        return super.getLocalizedName(stack);
-    }
-
-    @Override
-    public String getLocalizedName(FluidStack stack) {
-        if (heat <= 0 && !isHeatable()) return getBareLocalizedName(stack);
-        String name = getBareLocalizedName(stack);
-        return LocaleUtil.localize("buildcraft.fluid.heat_" + heat, name);
     }
 
     public void setMapColour(MapColor mapColour) {
@@ -94,23 +81,5 @@ public class BCFluid extends Fluid {
         this.dark = dark;
         this.colour = 0xFF_FF_FF_FF;
         return this;
-    }
-
-    public BCFluid setHeat(int heat) {
-        this.heat = heat;
-        return this;
-    }
-
-    public int getHeatValue() {
-        return heat;
-    }
-
-    public BCFluid setHeatable(boolean value) {
-        heatable = value;
-        return this;
-    }
-
-    public boolean isHeatable() {
-        return heatable;
     }
 }

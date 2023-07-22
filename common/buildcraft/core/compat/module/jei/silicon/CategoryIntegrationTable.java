@@ -23,7 +23,7 @@ public class CategoryIntegrationTable implements IRecipeCategory<WrapperIntegrat
 
     public CategoryIntegrationTable(IGuiHelper guiHelper) {
         backgroundLocation = new ResourceLocation("buildcraftsilicon", "textures/gui/integration_table.png");
-        background = guiHelper.createDrawable(backgroundLocation, 17, 22, 153, 71, 0, 0, 9, 0);
+        background = guiHelper.createDrawable(backgroundLocation, 17, 20, 153, 73, 0, 0, 9, 0);
     }
 
     @Override
@@ -56,21 +56,14 @@ public class CategoryIntegrationTable implements IRecipeCategory<WrapperIntegrat
             for (int x = 0; x < 3; ++x) {
                 int slotIndex = ((x == 1) && (y == 1)) ? 0 : (x + y * 3 + 1);
                 if (inputs.size() > slotIndex) {
-                    guiItemStacks.init(inventoryIndex, true, 19 + x * 25, 24 + y * 25);
+                    guiItemStacks.init(inventoryIndex, true, 10 + x * 25, 3 + y * 25);
                     guiItemStacks.set(inventoryIndex, inputs.get(slotIndex));
                     inventoryIndex++;
                 }
             }
         }
 
-//        for (int i = 0; i < wrapper.getInputs().size(); i++) {
-//            int x = ContainerIntegrationTable.SLOT_X[i] - 9;
-//            int y = ContainerIntegrationTable.SLOT_Y[i] - 23;
-//            guiItemStacks.init(i, true, x, y);
-//            guiItemStacks.set(i, (List) wrapper.getInputs().get(i));
-//        }
-
-        guiItemStacks.init(inventoryIndex, false, 129, 26);
+        guiItemStacks.init(inventoryIndex, false, 129, 28);
         guiItemStacks.set(inventoryIndex, recipeWrapper.output);
     }
 }
