@@ -14,8 +14,6 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.ImmutableSet.Builder;
@@ -25,12 +23,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 
@@ -41,32 +35,21 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.registry.ForgeRegistries;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import buildcraft.api.BCItems;
 import buildcraft.api.core.BCLog;
-import buildcraft.api.enums.EnumEngineType;
 import buildcraft.api.enums.EnumRedstoneChipset;
 import buildcraft.api.mj.MjAPI;
-import buildcraft.api.recipes.AssemblyRecipe;
 import buildcraft.api.recipes.AssemblyRecipeBasic;
 import buildcraft.api.recipes.IngredientStack;
 
-import buildcraft.lib.misc.ColourUtil;
 import buildcraft.lib.recipe.AssemblyRecipeRegistry;
 import buildcraft.lib.recipe.IngredientNBTBC;
 import buildcraft.lib.recipe.RecipeBuilderShaped;
 
-import buildcraft.core.BCCoreBlocks;
 import buildcraft.core.BCCoreConfig;
-import buildcraft.core.BCCoreItems;
 import buildcraft.silicon.gate.EnumGateLogic;
 import buildcraft.silicon.gate.EnumGateMaterial;
-import buildcraft.silicon.gate.EnumGateModifier;
 import buildcraft.silicon.gate.GateVariant;
-import buildcraft.silicon.recipe.FacadeAssemblyRecipes;
-import buildcraft.silicon.recipe.FacadeSwapRecipe;
 
 @Mod.EventBusSubscriber(modid = BCSilicon.MODID)
 public class BCSiliconRecipes {
@@ -75,6 +58,10 @@ public class BCSiliconRecipes {
     @SubscribeEvent
     public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
         if (BCSiliconItems.plugGate != null) {
+
+
+
+            /*
             // You can craft some of the basic gate types in a normal crafting table
             RecipeBuilderShaped builder = new RecipeBuilderShaped();
             builder.add(" m ");
@@ -129,9 +116,9 @@ public class BCSiliconRecipes {
                     ForgeRegistries.RECIPES.register(new ShapedOreRecipe(resultAnd.getItem().getRegistryName(),
                         resultOr, "i", 'i', new IngredientNBTBC(resultAnd)).setRegistryName(regNamePrefix + "_and"));
                 }
-            }
+            }*/
         }
-
+/*
         if (BCSiliconItems.plugPulsar != null) {
             ItemStack output = new ItemStack(BCSiliconItems.plugPulsar);
 
@@ -255,11 +242,11 @@ public class BCSiliconRecipes {
                     "gate_copier", 500 * MjAPI.MJ, input.build(), new ItemStack(BCSiliconItems.gateCopier)
                 )
             );
-        }
+        }*/
 
         scanForJsonRecipes();
     }
-
+/*
     private static void makeGateModifierAssembly(int multiplier, EnumGateMaterial material, EnumGateModifier modifier,
         IngredientStack... mods) {
         for (EnumGateLogic logic : EnumGateLogic.VALUES) {
@@ -296,7 +283,7 @@ public class BCSiliconRecipes {
         GateVariant variant = new GateVariant(EnumGateLogic.AND, material, modifier);
         builder.setResult(BCSiliconItems.plugGate.getStack(variant));
         builder.registerNbtAware("buildcraftsilicon:plug_gate_create_" + material + "_" + modifier);
-    }
+    }*/
 
     private static void scanForJsonRecipes() {
         final boolean[] failed = { false };

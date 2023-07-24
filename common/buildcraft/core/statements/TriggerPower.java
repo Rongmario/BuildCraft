@@ -6,14 +6,12 @@
 
 package buildcraft.core.statements;
 
+import buildcraft.transport.BCTransport;
+import buildcraft.transport.TriggerPowerHandler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-
 import buildcraft.api.core.EnumPipePart;
-import buildcraft.api.mj.IMjReadable;
-import buildcraft.api.mj.MjAPI;
 import buildcraft.api.statements.IStatement;
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
@@ -25,6 +23,9 @@ import buildcraft.lib.misc.LocaleUtil;
 
 import buildcraft.core.BCCoreSprites;
 import buildcraft.core.BCCoreStatements;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fml.common.Loader;
 
 public class TriggerPower extends BCStatement implements ITriggerInternal, ITriggerExternal {
     private final boolean high;
@@ -44,12 +45,12 @@ public class TriggerPower extends BCStatement implements ITriggerInternal, ITrig
         return LocaleUtil.localize("gate.trigger.machine.energyStored." + (high ? "high" : "low"));
     }
 
-    public boolean isTriggeredMjConnector(IMjReadable readable) {
+    public boolean isTriggeredMjConnector(IEnergyStorage readable) {
         if (readable == null) {
             return false;
         }
-        long stored = readable.getStored();
-        long max = readable.getCapacity();
+        long stored = readable.getEnergyStored();
+        long max = readable.getMaxEnergyStored();
 
         if (max > 0) {
             double level = stored / (double) max;
@@ -67,11 +68,14 @@ public class TriggerPower extends BCStatement implements ITriggerInternal, ITrig
     }
 
     public static boolean isTriggeringTile(TileEntity tile, EnumFacing face) {
-        return tile.getCapability(MjAPI.CAP_READABLE, face) != null;
+        if (Loader.isModLoaded(BCTransport.MODID)) {
+            return TriggerPowerHandler.isTriggeringTile(tile, face);
+        }
+        return tile.hasCapability(CapabilityEnergy.ENERGY, face);
     }
 
-    protected boolean isActive(ICapabilityProvider tile, EnumPipePart side) {
-        return isTriggeredMjConnector(tile.getCapability(MjAPI.CAP_READABLE, side.face));
+    protected boolean isActive(TileEntity tile, EnumPipePart side) {
+        return isTriggeredMjConnector(tile.getCapability(CapabilityEnergy.ENERGY, side.face));
     }
 
     @Override

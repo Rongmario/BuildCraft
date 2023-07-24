@@ -39,7 +39,6 @@ import buildcraft.lib.misc.StackUtil;
 import buildcraft.silicon.BCSiliconPlugs;
 import buildcraft.silicon.gate.EnumGateLogic;
 import buildcraft.silicon.gate.EnumGateMaterial;
-import buildcraft.silicon.gate.EnumGateModifier;
 import buildcraft.silicon.gate.GateVariant;
 import buildcraft.silicon.plug.PluggableGate;
 
@@ -98,13 +97,11 @@ public class ItemPluggableGate extends ItemBC_Neptune implements IItemPluggable 
     protected void addSubItems(CreativeTabs tab, NonNullList<ItemStack> subItems) {
         subItems.add(new ItemStack(this));
         for (EnumGateMaterial material : EnumGateMaterial.VALUES) {
-            if (!material.canBeModified) {
+            if (material == EnumGateMaterial.BASIC) {
                 continue;
             }
             for (EnumGateLogic logic : EnumGateLogic.VALUES) {
-                for (EnumGateModifier modifier : EnumGateModifier.VALUES) {
-                    subItems.add(getStack(new GateVariant(logic, material, modifier)));
-                }
+                subItems.add(getStack(new GateVariant(logic, material)));
             }
         }
     }

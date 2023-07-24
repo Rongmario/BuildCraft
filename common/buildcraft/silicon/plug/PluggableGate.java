@@ -55,7 +55,6 @@ import buildcraft.silicon.BCSiliconItems;
 import buildcraft.silicon.client.model.key.KeyPlugGate;
 import buildcraft.silicon.gate.EnumGateLogic;
 import buildcraft.silicon.gate.EnumGateMaterial;
-import buildcraft.silicon.gate.EnumGateModifier;
 import buildcraft.silicon.gate.GateLogic;
 import buildcraft.silicon.gate.GateVariant;
 import buildcraft.silicon.item.ItemGateCopier;
@@ -64,7 +63,6 @@ import buildcraft.transport.pipe.PluggableHolder;
 public class PluggableGate extends PipePluggable implements IWireEmitter {
     public static final FunctionContext MODEL_FUNC_CTX_STATIC, MODEL_FUNC_CTX_DYNAMIC;
     private static final NodeVariableObject<String> MODEL_MATERIAL;
-    private static final NodeVariableObject<String> MODEL_MODIFIER;
     private static final NodeVariableObject<String> MODEL_LOGIC;
     private static final NodeVariableObject<EnumFacing> MODEL_SIDE;
     private static final NodeVariableBoolean MODEL_IS_ON;
@@ -100,7 +98,6 @@ public class PluggableGate extends PipePluggable implements IWireEmitter {
 
         MODEL_FUNC_CTX_STATIC = DefaultContexts.createWithAll();
         MODEL_MATERIAL = MODEL_FUNC_CTX_STATIC.putVariableString("material");
-        MODEL_MODIFIER = MODEL_FUNC_CTX_STATIC.putVariableString("modifier");
         MODEL_LOGIC = MODEL_FUNC_CTX_STATIC.putVariableString("logic");
         MODEL_SIDE = MODEL_FUNC_CTX_STATIC.putVariableObject("side", EnumFacing.class);
 
@@ -113,12 +110,6 @@ public class PluggableGate extends PipePluggable implements IWireEmitter {
         infoMaterial.setIsComplete = true;
         infoMaterial.possibleValues
             .addAll(Arrays.stream(EnumGateMaterial.VALUES).map(m -> m.tag).collect(Collectors.toList()));
-
-        VariableInfoObject<String> infoModifier = MODEL_VAR_INFO.createInfoObject(MODEL_MODIFIER);
-        infoModifier.cacheType = CacheType.ALWAYS;
-        infoModifier.setIsComplete = true;
-        infoModifier.possibleValues
-            .addAll(Arrays.stream(EnumGateModifier.VALUES).map(m -> m.tag).collect(Collectors.toList()));
 
         VariableInfoObject<String> infoLogic = MODEL_VAR_INFO.createInfoObject(MODEL_LOGIC);
         infoLogic.cacheType = CacheType.ALWAYS;
@@ -311,7 +302,6 @@ public class PluggableGate extends PipePluggable implements IWireEmitter {
     public static void setClientModelVariables(EnumFacing side, GateVariant variant) {
         MODEL_SIDE.value = side;
         MODEL_MATERIAL.value = variant.material.tag;
-        MODEL_MODIFIER.value = variant.modifier.tag;
         MODEL_LOGIC.value = variant.logic.tag;
         MODEL_IS_ON.value = false;// Used by the item
     }

@@ -16,65 +16,55 @@ import buildcraft.lib.misc.LocaleUtil;
 public class GateVariant {
     public final EnumGateLogic logic;
     public final EnumGateMaterial material;
-    public final EnumGateModifier modifier;
     public final int numSlots;
     public final int numTriggerArgs, numActionArgs;
     private final int hash;
 
-    public GateVariant(EnumGateLogic logic, EnumGateMaterial material, EnumGateModifier modifier) {
+    public GateVariant(EnumGateLogic logic, EnumGateMaterial material) {
         this.logic = logic;
         this.material = material;
-        this.modifier = modifier;
-        this.numSlots = material.numSlots / modifier.slotDivisor;
-        this.numTriggerArgs = modifier.triggerParams;
-        this.numActionArgs = modifier.actionParams;
-        this.hash = Objects.hash(logic, material, modifier);
+        this.numSlots = material.numSlots;
+        this.numTriggerArgs = material.triggerArgs;
+        this.numActionArgs = material.actionArgs;
+        this.hash = Objects.hash(logic, material);
     }
 
     public GateVariant(NBTTagCompound nbt) {
         this.logic = EnumGateLogic.getByOrdinal(nbt.getByte("logic"));
         this.material = EnumGateMaterial.getByOrdinal(nbt.getByte("material"));
-        this.modifier = EnumGateModifier.getByOrdinal(nbt.getByte("modifier"));
-        this.numSlots = material.numSlots / modifier.slotDivisor;
-        this.numTriggerArgs = modifier.triggerParams;
-        this.numActionArgs = modifier.actionParams;
-        this.hash = Objects.hash(logic, material, modifier);
+        this.numSlots = material.numSlots;
+        this.numTriggerArgs = material.triggerArgs;
+        this.numActionArgs = material.actionArgs;
+        this.hash = Objects.hash(logic, material);
     }
 
     public NBTTagCompound writeToNBT() {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setByte("logic", (byte) logic.ordinal());
         nbt.setByte("material", (byte) material.ordinal());
-        nbt.setByte("modifier", (byte) modifier.ordinal());
         return nbt;
     }
 
     public GateVariant(PacketBuffer buffer) {
         this.logic = EnumGateLogic.getByOrdinal(buffer.readUnsignedByte());
         this.material = EnumGateMaterial.getByOrdinal(buffer.readUnsignedByte());
-        this.modifier = EnumGateModifier.getByOrdinal(buffer.readUnsignedByte());
-        this.numSlots = material.numSlots / modifier.slotDivisor;
-        this.numTriggerArgs = modifier.triggerParams;
-        this.numActionArgs = modifier.actionParams;
-        this.hash = Objects.hash(logic, material, modifier);
+        this.numSlots = material.numSlots;
+        this.numTriggerArgs = material.triggerArgs;
+        this.numActionArgs = material.actionArgs;
+        this.hash = Objects.hash(logic, material);
     }
 
     public void writeToBuffer(PacketBuffer buffer) {
         buffer.writeByte(logic.ordinal());
         buffer.writeByte(material.ordinal());
-        buffer.writeByte(modifier.ordinal());
     }
 
     public String getVariantName() {
-        if (material.canBeModified) {
-            return material.tag + "_" + logic.tag + "_" + modifier.tag;
-        } else {
-            return material.tag;
-        }
+        return material.tag+"_"+logic.tag;
     }
 
     public String getLocalizedName() {
-        if (material == EnumGateMaterial.CLAY_BRICK) {
+        if (material == EnumGateMaterial.BASIC) {
             return LocaleUtil.localize("gate.name.basic");
         } else {
             String gateName = LocaleUtil.localize("gate.name");
@@ -91,8 +81,7 @@ public class GateVariant {
         if (obj.getClass() != getClass()) return false;
         GateVariant other = (GateVariant) obj;
         return other.logic == logic//
-            && other.material == material//
-            && other.modifier == modifier;
+            && other.material == material;
     }
 
     @Override

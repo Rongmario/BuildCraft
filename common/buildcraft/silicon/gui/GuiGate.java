@@ -37,7 +37,6 @@ public class GuiGate extends GuiBC8<ContainerGate> {
         context.putConstantLong("gate.actions.args", gate.variant.numActionArgs);
         context.put_b("gate.two_columns", () -> gate.isOn);
         context.putConstant("gate.material", String.class, gate.variant.material.tag);
-        context.putConstant("gate.modifier", String.class, gate.variant.modifier.tag);
         context.putConstant("gate.logic", String.class, gate.variant.logic.tag);
         context.putConstant("gate.variant", String.class, gate.variant.getLocalizedName());
         properties.put("gate.triggers.possible", container.possibleTriggersContext);

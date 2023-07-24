@@ -47,6 +47,8 @@ public enum TriggerProviderPipes implements ITriggerProvider {
 
             if (holder.getPipe().getFlow() instanceof PipeFlowPower) {
                 triggers.add(BCTransportStatements.TRIGGER_POWER_REQUESTED);
+                triggers.add(BCTransportStatements.TRIGGER_OVERLOADED);
+                triggers.add(BCTransportStatements.TRIGGER_POWER_TRAVERSING);
             }
         }
     }

@@ -6,6 +6,8 @@
 
 package buildcraft.transport;
 
+import buildcraft.transport.pipe.behaviour.PipeBehaviourIronPower;
+import buildcraft.transport.statements.*;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 
@@ -14,29 +16,20 @@ import buildcraft.api.statements.StatementManager;
 import buildcraft.lib.misc.ColourUtil;
 
 import buildcraft.transport.pipe.behaviour.PipeBehaviourEmzuli.SlotIndex;
-import buildcraft.transport.statements.ActionExtractionPreset;
-import buildcraft.transport.statements.ActionParameterSignal;
-import buildcraft.transport.statements.ActionPipeColor;
-import buildcraft.transport.statements.ActionPipeDirection;
-import buildcraft.transport.statements.ActionPipeSignal;
-import buildcraft.transport.statements.ActionProviderPipes;
-import buildcraft.transport.statements.TriggerFluidsTraversing;
-import buildcraft.transport.statements.TriggerItemsTraversing;
-import buildcraft.transport.statements.TriggerParameterSignal;
-import buildcraft.transport.statements.TriggerPipeSignal;
-import buildcraft.transport.statements.TriggerPowerRequested;
-import buildcraft.transport.statements.TriggerProviderPipes;
 
 public class BCTransportStatements {
 
     public static final TriggerPipeSignal[] TRIGGER_PIPE_SIGNAL;
     public static final TriggerPowerRequested TRIGGER_POWER_REQUESTED;
+    public static final TriggerPowerTraversing TRIGGER_POWER_TRAVERSING;
+    public static final TriggerOverloaded TRIGGER_OVERLOADED;
     public static final TriggerItemsTraversing TRIGGER_ITEMS_TRAVERSING;
     public static final TriggerFluidsTraversing TRIGGER_FLUIDS_TRAVERSING;
     public static final ActionPipeSignal[] ACTION_PIPE_SIGNAL;
     public static final ActionPipeColor[] ACTION_PIPE_COLOUR;
     public static final ActionExtractionPreset[] ACTION_EXTRACTION_PRESET;
     public static final ActionPipeDirection[] ACTION_PIPE_DIRECTION;
+    public static final ActionIronKinesis[] ACTION_IRON_KINESES;
 
     static {
         TRIGGER_PIPE_SIGNAL = new TriggerPipeSignal[2 * ColourUtil.COLOURS.length];
@@ -65,7 +58,14 @@ public class BCTransportStatements {
             ACTION_PIPE_DIRECTION[face.ordinal()] = new ActionPipeDirection(face);
         }
 
+        ACTION_IRON_KINESES = new ActionIronKinesis[PipeBehaviourIronPower.LIMITER.length];
+        for (int i = 0; i < PipeBehaviourIronPower.LIMITER.length; i++) {
+            ACTION_IRON_KINESES[i]=new ActionIronKinesis(i);
+        }
+
         TRIGGER_POWER_REQUESTED = new TriggerPowerRequested();
+        TRIGGER_POWER_TRAVERSING = new TriggerPowerTraversing();
+        TRIGGER_OVERLOADED = new TriggerOverloaded();
         TRIGGER_ITEMS_TRAVERSING = new TriggerItemsTraversing();
         TRIGGER_FLUIDS_TRAVERSING = new TriggerFluidsTraversing();
 

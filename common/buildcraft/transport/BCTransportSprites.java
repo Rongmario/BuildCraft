@@ -9,6 +9,7 @@ package buildcraft.transport;
 import java.util.EnumMap;
 import java.util.Locale;
 
+import buildcraft.transport.pipe.behaviour.PipeBehaviourIronPower;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.EnumFacing;
 
@@ -34,6 +35,8 @@ public class BCTransportSprites {
     public static final SpriteHolder PIPE_COLOUR_BORDER_INNER;
 
     public static final SpriteHolder TRIGGER_POWER_REQUESTED;
+    public static final SpriteHolder TRIGGER_POWER_TRAVERSING;
+    public static final SpriteHolder TRIGGER_OVERLOADED;
     public static final SpriteHolder TRIGGER_ITEMS_TRAVERSING;
     public static final SpriteHolder TRIGGER_FLUIDS_TRAVERSING;
 
@@ -42,6 +45,7 @@ public class BCTransportSprites {
     private static final EnumMap<EnumDyeColor, SpriteHolder> PIPE_SIGNAL_ON;
     private static final EnumMap<EnumDyeColor, SpriteHolder> PIPE_SIGNAL_OFF;
     private static final EnumMap<EnumFacing, SpriteHolder> ACTION_PIPE_DIRECTION;
+    private static final SpriteHolder[] ACTION_IRON_KINESIS = new SpriteHolder[PipeBehaviourIronPower.LIMITER.length];
 
     public static final SpriteHolder POWER_FLOW;
     public static final SpriteHolder POWER_FLOW_OVERLOAD;
@@ -79,10 +83,16 @@ public class BCTransportSprites {
                 getHolder("core", "triggers/trigger_dir_" + face.getName().toLowerCase(Locale.ROOT)));
         }
 
+        for (int i = 0; i < PipeBehaviourIronPower.LIMITER.length; i++) {
+            ACTION_IRON_KINESIS[i] = getHolder("transport", "triggers/ironkinesis_"+i);
+        }
+
         POWER_FLOW = getHolder("pipes/power_flow");
         POWER_FLOW_OVERLOAD = getHolder("pipes/power_flow_overload");
 
         TRIGGER_POWER_REQUESTED = getHolder("transport", "triggers/trigger_pipecontents_requestsenergy");
+        TRIGGER_POWER_TRAVERSING = getHolder("transport", "triggers/trigger_pipecontents_containsenergy");
+        TRIGGER_OVERLOADED = getHolder("transport", "triggers/trigger_pipecontents_toomuchenergy");
         TRIGGER_ITEMS_TRAVERSING = getHolder("transport", "triggers/trigger_pipecontents_containsitems");
         TRIGGER_FLUIDS_TRAVERSING = getHolder("transport", "triggers/trigger_pipecontents_containsfluids");
     }
@@ -116,5 +126,9 @@ public class BCTransportSprites {
 
     public static SpriteHolder getPipeDirection(EnumFacing face) {
         return ACTION_PIPE_DIRECTION.get(face);
+    }
+
+    public static SpriteHolder getIronKinesis(int index) {
+        return ACTION_IRON_KINESIS[index];
     }
 }

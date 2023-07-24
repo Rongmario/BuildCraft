@@ -119,7 +119,7 @@ public class BCTransportPipes {
         ironItem = builder.idTexPrefix("iron_item").flowItem().define();
         ironFluid = builder.idTexPrefix("iron_fluid").flowFluid().define();
 
-        String[] texSuffix1 = new String[]{"_0", "_1", "_2", "_3", "_4", "_5", "_6"};
+        String[] texSuffix1 = new String[]{"_0", "_1", "_2", "_3", "_4", "_5", "_6", "_7"};
         builder.logic(PipeBehaviourIronPower::new, PipeBehaviourIronPower::new).texSuffixes(texSuffix1);
         ironPower = builder.idTexPrefix("iron_power").flowPower().define();
 

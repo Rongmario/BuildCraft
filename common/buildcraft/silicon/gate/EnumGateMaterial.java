@@ -12,27 +12,32 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 
 public enum EnumGateMaterial {
-    CLAY_BRICK(Blocks.BRICK_BLOCK, 1, false),
-    IRON(Blocks.IRON_BLOCK, 2, true),
-    NETHER_BRICK(Blocks.NETHER_BRICK, 4, true),
-    GOLD(Blocks.GOLD_BLOCK, 8, true);
+    BASIC(Blocks.BRICK_BLOCK, 1, 0, 0),
+    IRON(Blocks.IRON_BLOCK, 2, 0, 0),
+    GOLD(Blocks.GOLD_BLOCK, 4, 1, 0),
+    DIAMOND(Blocks.DIAMOND_BLOCK, 8, 1, 0),
+    EMERALD(Blocks.EMERALD_BLOCK, 4, 3, 3),
+    QUARTZ(Blocks.QUARTZ_BLOCK, 2, 1, 1);
 
     public static final EnumGateMaterial[] VALUES = values();
 
     public final Block block;
     public final int numSlots;
-    public final boolean canBeModified;
+    public final int triggerArgs;
+    public final int actionArgs;
+
     public final String tag = name().toLowerCase(Locale.ROOT);
 
-    EnumGateMaterial(Block block, int numSlots, boolean canBeModified) {
+    EnumGateMaterial(Block block, int numSlots, int triggerArgs, int actionArgs) {
         this.block = block;
         this.numSlots = numSlots;
-        this.canBeModified = canBeModified;
+        this.triggerArgs = triggerArgs;
+        this.actionArgs = actionArgs;
     }
 
     public static EnumGateMaterial getByOrdinal(int ord) {
         if (ord < 0 || ord >= VALUES.length) {
-            return EnumGateMaterial.CLAY_BRICK;
+            return EnumGateMaterial.BASIC;
         }
         return VALUES[ord];
     }

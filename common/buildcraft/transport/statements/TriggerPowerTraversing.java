@@ -1,24 +1,22 @@
 package buildcraft.transport.statements;
 
-import javax.annotation.Nullable;
-
 import buildcraft.api.core.render.ISprite;
 import buildcraft.api.gates.IGate;
 import buildcraft.api.statements.IStatementContainer;
 import buildcraft.api.statements.IStatementParameter;
 import buildcraft.api.statements.ITriggerInternal;
 import buildcraft.api.transport.pipe.PipeFlow;
-
-import buildcraft.lib.misc.LocaleUtil;
-
 import buildcraft.core.statements.BCStatement;
+import buildcraft.lib.misc.LocaleUtil;
 import buildcraft.transport.BCTransportSprites;
 import buildcraft.transport.pipe.flow.PipeFlowPower;
 
-public class TriggerPowerRequested extends BCStatement implements ITriggerInternal {
+import javax.annotation.Nullable;
 
-    public TriggerPowerRequested() {
-        super("buildcraft:powerRequested");
+public class TriggerPowerTraversing extends BCStatement implements ITriggerInternal {
+
+    public TriggerPowerTraversing() {
+        super("buildcraft:powerFlowing");
     }
 
     @Override
@@ -32,18 +30,18 @@ public class TriggerPowerRequested extends BCStatement implements ITriggerIntern
         }
         final PipeFlowPower flow = (PipeFlowPower) f;
 
-        return flow.requestingPower();
+        return flow.powerFlowing();
     }
 
     @Override
     public String getDescription() {
-        return LocaleUtil.localize("gate.trigger.pipe.requestsEnergy");
+        return LocaleUtil.localize("gate.trigger.pipe.containsEnergy");
     }
 
     @Nullable
     @Override
     public ISprite getSprite() {
-        return BCTransportSprites.TRIGGER_POWER_REQUESTED;
+        return BCTransportSprites.TRIGGER_POWER_TRAVERSING;
     }
 
 }

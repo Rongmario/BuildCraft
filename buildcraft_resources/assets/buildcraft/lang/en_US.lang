@@ -332,13 +332,23 @@ gate.action.station.force_robot=Force Robot
 gate.action.robot.filter=Filter
 gate.action.robot.filter_tool=Filter Tool
 gate.action.pipe.direction=Face the %s side
+gate.action.pipe.ironpower.0=Set 20 RF/t limit
+gate.action.pipe.ironpower.1=Set 40 RF/t limit
+gate.action.pipe.ironpower.2=Set 80 RF/t limit
+gate.action.pipe.ironpower.3=Set 160 RF/t limit
+gate.action.pipe.ironpower.4=Set 320 RF/t limit
+gate.action.pipe.ironpower.5=Set 640 RF/t limit
+gate.action.pipe.ironpower.6=Set 1280 RF/t limit
+gate.action.pipe.ironpower.7=Set 0 RF/t limit
 
 gate.logic.and=AND
 gate.logic.or=OR
 
 gate.material.iron=Iron
-gate.material.nether_brick=Nether Brick
 gate.material.gold=Gold
+gate.material.diamond=Diamond
+gate.material.emerald=Emerald
+gate.material.quartz=Quartz
 
 gate.slots=%s Slots
 gate.params=%s Slot Parameters

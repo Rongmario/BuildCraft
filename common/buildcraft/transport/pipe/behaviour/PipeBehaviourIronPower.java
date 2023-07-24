@@ -2,8 +2,11 @@ package buildcraft.transport.pipe.behaviour;
 
 import buildcraft.api.core.EnumPipePart;
 import buildcraft.api.transport.pipe.*;
+import buildcraft.api.transport.pluggable.PipePluggable;
+import buildcraft.transport.BCTransportStatements;
 import buildcraft.transport.pipe.flow.IVariableFlowHook;
 import buildcraft.transport.pipe.flow.PipeFlowPower;
+import buildcraft.transport.statements.ActionPipeDirection;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -17,9 +20,9 @@ import java.io.IOException;
 
 public class PipeBehaviourIronPower extends PipeBehaviour implements IVariableFlowHook {
 
-    public static final int[] LIMITER = {20, 40, 80, 160, 320, 640, 1280};
+    public static final int[] LIMITER = {20, 40, 80, 160, 320, 640, 1280, 0};
 
-    private int limitedIndex = 6;
+    private int limitedIndex = 0;
 
     public PipeBehaviourIronPower(IPipe pipe) {
         super(pipe);
@@ -29,6 +32,29 @@ public class PipeBehaviourIronPower extends PipeBehaviour implements IVariableFl
         super(pipe, nbt);
         if( nbt.hasKey("index")) {
             limitedIndex = nbt.getInteger("index");
+        }
+    }
+
+
+    // Actions
+
+    @PipeEventHandler
+    public void addInternalActions(PipeEventStatement.AddActionInternal event) {
+        for (int i = 0; i < LIMITER.length; i++) {
+            event.actions.add(BCTransportStatements.ACTION_IRON_KINESES[i]);
+        }
+    }
+
+    @PipeEventHandler
+    public void onActionActivate(PipeEventActionActivate event) {
+        for (int i = 0; i < LIMITER.length; i++) {
+            if (event.action == BCTransportStatements.ACTION_IRON_KINESES[i]) {
+                limitedIndex = i;
+                pipe.getHolder().scheduleNetworkUpdate(IPipeHolder.PipeMessageReceiver.BEHAVIOUR);
+                if (pipe.getFlow() instanceof PipeFlowPower) {
+                    ((PipeFlowPower) pipe.getFlow()).reconfigure();
+                }
+            }
         }
     }
 

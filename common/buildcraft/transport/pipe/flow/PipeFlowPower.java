@@ -48,7 +48,7 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
     public Vec3d clientDisplayFlowCentreLast = Vec3d.ZERO;
 
     public int maxPower = -1;
-    private boolean isReceiver = false;
+    public boolean isReceiver = false;
 
     public PipeFlowPower(IPipe pipe) {
         super(pipe);
@@ -84,7 +84,6 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
         configure.setMaxPower(pti.transferPerTick);
         if (pipe.getBehaviour() instanceof IVariableFlowHook) {
             int maxRF = ((IVariableFlowHook) pipe.getBehaviour()).getMaxFlow();
-            System.out.println("setting to "+maxRF+" rf");
             configure.setMaxPower(maxRF);
         }
         pipe.getHolder().fireEvent(configure);
@@ -161,6 +160,27 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
     public double[] displayPower = new double[6];
     public short[] displayFlow = new short[6];
     public int[] nextPowerQuery = new int[6];
+
+    public boolean requestingPower() {
+        int sum = 0;
+        for (int i : nextPowerQuery) {
+            sum += i;
+        }
+        for (int i : powerQuery) {
+            sum += i;
+        }
+        return sum > 0;
+    }
+
+    public boolean powerFlowing() {
+        double sum = 0;
+        for (AverageInt av : powerAverage) {
+            sum += av.getAverage();
+        }
+        return sum > 0;
+    }
+
+
     public double[] internalNextPower = new double[6];
     public int overload;
 
@@ -493,6 +513,13 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
 
     public boolean isOverloaded() {
         return overload >= OVERLOAD_TICKS;
+    }
+
+    public boolean isOverloaded2() {
+        for (AverageInt i : powerAverage) {
+            if (Math.abs(maxPower-i.getAverage()) < 0.5) return true;
+        }
+        return false;
     }
 
 
