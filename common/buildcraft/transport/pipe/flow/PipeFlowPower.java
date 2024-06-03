@@ -484,6 +484,7 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
                 }
             }
         }
+        buffer.writeInt(energy);
     }
 
     @Override
@@ -500,6 +501,7 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
                 }
             }
         }
+        energy = buffer.readInt();
     }
 
 
@@ -590,8 +592,8 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
             for (int i = 0; i < EnumFacing.VALUES.length; i++) {
                 powerSources[i] = nbt.getBoolean("powerSources[" + i + "]");
             }
-            energy = nbt.getInteger("energy");
         }
+        energy = nbt.getInteger("rf");
     }
     @Override
     public NBTTagCompound writeToNbt() {
@@ -607,8 +609,9 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
             for (int i = 0; i < EnumFacing.VALUES.length; i++) {
                 nbttagcompound.setBoolean("powerSources[" + i + "]", powerSources[i]);
             }
-            nbttagcompound.setInteger("energy", energy);
         }
+        nbttagcompound.setInteger("rf", energy);
+
         return nbttagcompound;
     }
 
@@ -636,13 +639,13 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
 
     private int requestedEnergy, sources;
 
-    private int energy = 0;
-    private int capacity = 40960;
-    private int maxReceive = 40960;
+    private int energy;
+    private final int capacity = 2560;
+
     @Override
     public int receiveEnergy(int maxReceive, boolean simulate) {
         if (!isReceiver) return 0;
-        int energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
+        int energyReceived = Math.min(capacity - energy, Math.min(2560, maxReceive));
         if (!simulate) energy += energyReceived;
         return energyReceived;
     }

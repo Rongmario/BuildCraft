@@ -47,9 +47,17 @@ public class BCCoreSprites {
     public static final SpriteHolder TRIGGER_REDSTONE_ACTIVE;
     public static final SpriteHolder TRIGGER_REDSTONE_INACTIVE;
     public static final SpriteHolder ACTION_REDSTONE;
+    public static final SpriteHolder[] REDSTONE_STRENGTH = new SpriteHolder[16];
 
     public static final SpriteHolder TRIGGER_POWER_HIGH;
     public static final SpriteHolder TRIGGER_POWER_LOW;
+
+    // ic2
+    public static SpriteHolder CHARGE_EMPTY;
+    public static SpriteHolder CHARGE_LOW;
+    public static SpriteHolder CHARGE_HIGH;
+    public static SpriteHolder CHARGE_FULL;
+    public static SpriteHolder REDSTONE;
 
     public static final SpriteHolder[] PARAM_REDSTONE_LEVEL;
 
@@ -76,7 +84,13 @@ public class BCCoreSprites {
         LASER_POWER_MED = getHolder("lasers/power_med");
         LASER_POWER_HIGH = getHolder("lasers/power_high");
         LASER_POWER_FULL = getHolder("lasers/power_full");
-        
+
+        CHARGE_EMPTY = getHolder("compattriggers/charge_empty");
+        CHARGE_LOW = getHolder("compattriggers/charge_low");
+        CHARGE_HIGH = getHolder("compattriggers/charge_high");
+        CHARGE_FULL = getHolder("compattriggers/charge_full");
+
+        REDSTONE = getHolder("compattriggers/redstone");
         TRIGGER_TRUE = getHolder("triggers/trigger_true");
         PARAM_GATE_SIDE_ONLY = getHolder("triggers/redstone_gate_side_only");
 
@@ -86,6 +100,10 @@ public class BCCoreSprites {
         TRIGGER_REDSTONE_ACTIVE = getHolder("triggers/trigger_redstoneinput_active");
         TRIGGER_REDSTONE_INACTIVE = getHolder("triggers/trigger_redstoneinput_inactive");
         ACTION_REDSTONE = getHolder("triggers/action_redstoneoutput");
+
+        for (int i = 0; i < 16; i++) {
+            REDSTONE_STRENGTH[i] = getHolder("triggers/parameter_redstone_"+i);
+        }
 
         TRIGGER_POWER_HIGH = getHolder("triggers/trigger_energy_storage_high");
         TRIGGER_POWER_LOW = getHolder("triggers/trigger_energy_storage_low");

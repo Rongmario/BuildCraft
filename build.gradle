@@ -81,6 +81,16 @@ repositories {
     maven { name="cofh"; url="http://maven.covers1624.net" }
     maven { name="forestry"; url = "http://maven.ic2.player.to/" }
     maven { name "CraftTweaker"; url "http://maven.blamejared.com/" }
+
+    maven {
+        // TOP, CTM, GRS, AE2
+        name="Curse Maven"
+        url="https://www.cursemaven.com"
+
+        //content {
+        //    includeGroup 'curse.maven'
+        //}
+    }
 }
 
 
@@ -105,10 +115,19 @@ dependencies {
     //compileOnly "mcp.mobius.waila:Hwyla:${config.hwyla_version}:api"
     //runtime "mcp.mobius.waila:Hwyla:${config.hwyla_version}"
 
-    // Forestry
-    deobfCompile "net.sengir.forestry:forestry_${config.mc_version}:${config.forestry_version}"
+    deobfCompile "curse.maven:mrtjpcore-229002:2735197"
+    deobfCompile "curse.maven:project-red-core-228702:2745545"
+    deobfCompile "curse.maven:project-red-expansion-229048:2745550"
+    deobfCompile "curse.maven:project-red-exploration-229049:2745551"
+    deobfCompile "curse.maven:project-red-fabrication-230111:2745547"
+    deobfCompile "curse.maven:project-red-integration-229045:2745548"
 
-    deobfCompile "net.industrial-craft:industrialcraft-2:${config.ic2_version}"
+    // Forestry
+    //deobfCompile "net.sengir.forestry:forestry_${config.mc_version}:${config.forestry_version}"
+	deobfCompile "curse.maven:forestry-59751:2684780"
+	deobfCompile "curse.maven:industrial-craft-242638:3838713"
+
+    //deobfCompile "net.industrial-craft:industrialcraft-2:${config.ic2_version}"
 
     // CraftTweaker
     deobfCompile "CraftTweaker2:CraftTweaker2-API:${config.crafttweaker_version}"

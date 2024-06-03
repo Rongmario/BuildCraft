@@ -1,5 +1,6 @@
 package buildcraft.silicon;
 
+import buildcraft.silicon.statement.TriggerTimer;
 import net.minecraft.item.EnumDyeColor;
 
 import net.minecraftforge.common.MinecraftForge;
@@ -12,6 +13,7 @@ public class BCSiliconSprites {
 
     public static final SpriteHolder TRIGGER_LIGHT_LOW;
     public static final SpriteHolder TRIGGER_LIGHT_HIGH;
+    public static final SpriteHolder[] TRIGGER_TIMER = new SpriteHolder[TriggerTimer.TIMERS.length];
 
     public static final SpriteHolder ACTION_PULSAR_CONSTANT;
     public static final SpriteHolder ACTION_PULSAR_SINGLE;
@@ -26,6 +28,9 @@ public class BCSiliconSprites {
         ACTION_PIPE_COLOUR = new SpriteHolder[ColourUtil.COLOURS.length];
         for (EnumDyeColor colour : ColourUtil.COLOURS) {
             ACTION_PIPE_COLOUR[colour.ordinal()] = getHolder("core", "items/paintbrush/" + colour.getName());
+        }
+        for (int i = 0; i < TRIGGER_TIMER.length; i++) {
+            TRIGGER_TIMER[i] = getHolder("triggers/timer_"+i);
         }
     }
 

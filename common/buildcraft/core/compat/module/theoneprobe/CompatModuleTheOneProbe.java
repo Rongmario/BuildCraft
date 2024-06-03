@@ -14,6 +14,6 @@ public class CompatModuleTheOneProbe extends CompatModuleBase {
     @Override
     public void preInit() {
         FMLInterModComms.sendFunctionMessage(compatModId(), "getTheOneProbe",
-            "buildcraft.compat.module.theoneprobe.BCPluginTOP");
+            "buildcraft.core.compat.module.theoneprobe.BCPluginTOP");
     }
 }

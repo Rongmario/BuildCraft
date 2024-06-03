@@ -10,6 +10,7 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 
+import buildcraft.core.compat.module.ic2.IC2Statements;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
@@ -23,6 +24,7 @@ import buildcraft.api.tiles.IControllable;
 import buildcraft.api.tiles.TilesAPI;
 
 import buildcraft.core.BCCoreStatements;
+import net.minecraftforge.fml.common.Loader;
 
 public enum CoreActionProvider implements IActionProvider {
     INSTANCE;
@@ -39,6 +41,9 @@ public enum CoreActionProvider implements IActionProvider {
 
     @Override
     public void addExternalActions(Collection<IActionExternal> res, @Nonnull EnumFacing side, TileEntity tile) {
+        if (Loader.isModLoaded("ic2")) {
+            IC2Statements.addActions(res, side, tile);
+        }
         IControllable controllable = tile.getCapability(TilesAPI.CAP_CONTROLLABLE, side.getOpposite());
         if (controllable != null) {
             for (ActionMachineControl action : BCCoreStatements.ACTION_MACHINE_CONTROL) {

@@ -10,11 +10,13 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 
+import buildcraft.core.compat.module.ic2.IC2Statements;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.items.IItemHandler;
 
 import buildcraft.api.statements.IStatementContainer;
@@ -52,6 +54,10 @@ public enum CoreTriggerProvider implements ITriggerProvider {
 
     @Override
     public void addExternalTriggers(Collection<ITriggerExternal> res, @Nonnull EnumFacing side, TileEntity tile) {
+
+        if (Loader.isModLoaded("ic2")) {
+            IC2Statements.addTriggers(res, side, tile);
+        }
 
         if (TriggerPower.isTriggeringTile(tile, side.getOpposite())) {
             res.add(BCCoreStatements.TRIGGER_POWER_HIGH);

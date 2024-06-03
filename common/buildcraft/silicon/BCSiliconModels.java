@@ -1,5 +1,6 @@
 package buildcraft.silicon;
 
+import buildcraft.silicon.client.model.key.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.item.EnumDyeColor;
@@ -30,11 +31,6 @@ import buildcraft.lib.misc.data.ModelVariableData;
 import buildcraft.silicon.client.FacadeItemColours;
 import buildcraft.silicon.client.model.GateMeshDefinition;
 import buildcraft.silicon.client.model.ModelGateItem;
-import buildcraft.silicon.client.model.key.KeyPlugFacade;
-import buildcraft.silicon.client.model.key.KeyPlugGate;
-import buildcraft.silicon.client.model.key.KeyPlugLens;
-import buildcraft.silicon.client.model.key.KeyPlugLightSensor;
-import buildcraft.silicon.client.model.key.KeyPlugPulsar;
 import buildcraft.silicon.client.model.plug.ModelFacadeItem;
 import buildcraft.silicon.client.model.plug.ModelLensItem;
 import buildcraft.silicon.client.model.plug.PlugBakerFacade;
@@ -52,6 +48,8 @@ import buildcraft.silicon.tile.TileProgrammingTable_Neptune;
 
 public class BCSiliconModels {
     public static final ModelHolderStatic LIGHT_SENSOR;
+    public static final ModelHolderStatic TIMER;
+    public static final ModelHolderStatic FADER;
 
     public static final ModelHolderVariable GATE_STATIC;
     public static final ModelHolderVariable GATE_DYNAMIC;
@@ -67,9 +65,13 @@ public class BCSiliconModels {
 
     public static final IPluggableStaticBaker<KeyPlugPulsar> BAKER_PLUG_PULSAR;
     public static final IPluggableStaticBaker<KeyPlugLightSensor> BAKER_PLUG_LIGHT_SENSOR;
+    public static final IPluggableStaticBaker<KeyPlugTimer> BAKER_PLUG_TIMER;
+    public static final IPluggableStaticBaker<KeyPlugFader> BAKER_PLUG_FADER;
 
     static {
         LIGHT_SENSOR = getStaticModel("plugs/light_sensor");
+        TIMER = getStaticModel("plugs/timer");
+        FADER = getStaticModel("plugs/fader");
         GATE_STATIC = getModel("plugs/gate", PluggableGate.MODEL_FUNC_CTX_STATIC);
         GATE_DYNAMIC = getModel("plugs/gate_dynamic", PluggableGate.MODEL_FUNC_CTX_DYNAMIC);
         PULSAR_STATIC = getStaticModel("plugs/pulsar_static");
@@ -77,6 +79,8 @@ public class BCSiliconModels {
 
         BAKER_PLUG_PULSAR = new PlugBakerSimple<>(PULSAR_STATIC::getCutoutQuads);
         BAKER_PLUG_LIGHT_SENSOR = new PlugBakerSimple<>(LIGHT_SENSOR::getCutoutQuads);
+        BAKER_PLUG_TIMER = new PlugBakerSimple<>(TIMER::getCutoutQuads);
+        BAKER_PLUG_FADER = new PlugBakerSimple<>(FADER::getCutoutQuads);
 
         {
             FunctionContext fnCtx = DefaultContexts.createWithAll();
@@ -111,6 +115,8 @@ public class BCSiliconModels {
             pipeRegistryClient.registerBaker(KeyPlugGate.class, PlugGateBaker.INSTANCE);
             pipeRegistryClient.registerBaker(KeyPlugPulsar.class, BAKER_PLUG_PULSAR);
             pipeRegistryClient.registerBaker(KeyPlugLightSensor.class, BAKER_PLUG_LIGHT_SENSOR);
+            pipeRegistryClient.registerBaker(KeyPlugTimer.class, BAKER_PLUG_TIMER);
+            pipeRegistryClient.registerBaker(KeyPlugFader.class, BAKER_PLUG_FADER);
             pipeRegistryClient.registerBaker(KeyPlugLens.class, PlugBakerLens.INSTANCE);
             pipeRegistryClient.registerBaker(KeyPlugFacade.class, PlugBakerFacade.INSTANCE);
 
@@ -131,6 +137,8 @@ public class BCSiliconModels {
         putModel(event, "plug_pulsar#inventory",
             new ModelPluggableItem(PULSAR_STATIC.getCutoutQuads(), PULSAR_DYNAMIC.getCutoutQuads()));
         putModel(event, "plug_light_sensor#inventory", new ModelPluggableItem(LIGHT_SENSOR.getCutoutQuads()));
+        putModel(event, "plug_timer#inventory", new ModelPluggableItem(TIMER.getCutoutQuads()));
+        putModel(event, "plug_fader#inventory", new ModelPluggableItem(FADER.getCutoutQuads()));
         putModel(event, "plug_facade#inventory", ModelFacadeItem.INSTANCE);
 
         PlugGateBaker.onModelBake();

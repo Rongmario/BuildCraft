@@ -78,14 +78,13 @@ public class BCPluginTOP implements Function<ITheOneProbe, Void>, IBlockDisplayO
             if (entity instanceof ILaserTarget) {
                 this.addLaserTargetInfo(probeInfo, (ILaserTarget) entity);
             }
-            System.out.println(1);
             if (entity instanceof TilePipeHolder) {
-                System.out.println(2);
                 IPipe pipe = ((TilePipeHolder) entity).getPipe();
                 if (pipe.getFlow() instanceof PipeFlowPower) {
-                    probeInfo.horizontal().text(TextFormatting.GRAY+String.valueOf((((PipeFlowPower) pipe.getFlow()).maxPower)) + "RF/t");
+
+                    probeInfo.horizontal().text(TextFormatting.GRAY+String.valueOf((((PipeFlowPower) pipe.getFlow()).maxPower)) + "RF/t", probeInfo.defaultTextStyle());
                 } else if (pipe.getFlow() instanceof PipeFlowFluids) {
-                    probeInfo.horizontal().text(TextFormatting.GRAY+String.valueOf((((PipeFlowFluids) pipe.getFlow()).fluidTransferInfo.transferPerTick)) + "mb/t");
+                    probeInfo.horizontal().text(TextFormatting.GRAY+String.valueOf((((PipeFlowFluids) pipe.getFlow()).fluidTransferInfo.transferPerTick)) + "mb/t", probeInfo.defaultTextStyle());
                 }
             }
         }

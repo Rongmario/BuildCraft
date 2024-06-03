@@ -14,6 +14,8 @@ import net.minecraftforge.fml.common.event.FMLInterModComms.IMCEvent;
 import net.minecraftforge.fml.common.event.FMLInterModComms.IMCMessage;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import buildcraft.api.BCModules;
@@ -31,6 +33,7 @@ import buildcraft.core.BCCore;
 import buildcraft.silicon.plug.FacadeBlockStateInfo;
 import buildcraft.silicon.plug.FacadeInstance;
 import buildcraft.silicon.plug.FacadeStateManager;
+import net.minecraftforge.fml.relauncher.Side;
 
 //@formatter:off
 @Mod(
@@ -42,6 +45,7 @@ import buildcraft.silicon.plug.FacadeStateManager;
         + "after:buildcrafttransport"
 )
 //@formatter:on
+@Mod.EventBusSubscriber
 public class BCSilicon {
     public static final String MODID = "buildcraftsilicon";
 
@@ -97,6 +101,14 @@ public class BCSilicon {
         }
     }
 
+    public static int counter = 4;
+    @SubscribeEvent
+    public static void onTick(TickEvent.ServerTickEvent event) {
+        if (event.side == Side.SERVER) {
+            counter++;
+        }
+    }
+
     static {
         startBatch();
         // Items
@@ -112,6 +124,8 @@ public class BCSilicon {
             .oldReg("plug_pulsar");
         registerTag("item.plug.light_sensor").reg("plug_light_sensor").locale("light_sensor").model("plug_light_sensor")
             .tab("buildcraft.plugs").oldReg("plug_light_sensor");
+        registerTag("item.plug.timer").reg("plug_timer").locale("timer").model("plug_timer").tab("buildcraft.plugs");
+        registerTag("item.plug.fader").reg("plug_fader").locale("fader").model("plug_fader").tab("buildcraft.plugs");
         registerTag("item.plug.facade").reg("plug_facade").locale("Facade").model("plug_facade")
             .tab("buildcraft.facades").oldReg("plug_facade");
         // Item Blocks

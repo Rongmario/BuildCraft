@@ -29,6 +29,8 @@ public class BCSiliconItems {
     public static ItemPluggableSimple plugPulsar;
     public static ItemPluggableSimple plugLightSensor;
     public static ItemPluggableFacade plugFacade;
+    public static ItemPluggableSimple plugTimer;
+    public static ItemPluggableSimple plugFader;
 
     public static void preInit() {
         redstoneChipset = HELPER.addItem(new ItemRedstoneChipset("item.redstone_chipset"));
@@ -39,6 +41,8 @@ public class BCSiliconItems {
         plugPulsar = HELPER.addItem(new ItemPluggableSimple("item.plug.pulsar", BCSiliconPlugs.pulsar,
             PluggablePulsar::new, ItemPluggableSimple.PIPE_BEHAVIOUR_ACCEPTS_RS_POWER));
         plugLightSensor = HELPER.addItem(new ItemPluggableSimple("item.plug.light_sensor", BCSiliconPlugs.lightSensor));
+        plugTimer = HELPER.addItem(new ItemPluggableSimple("item.plug.timer", BCSiliconPlugs.timer));
+        plugFader = HELPER.addItem(new ItemPluggableSimple("item.plug.fader", BCSiliconPlugs.fader));
         plugFacade = HELPER.addItem(new ItemPluggableFacade("item.plug.facade"));
         FacadeAPI.facadeItem = plugFacade;
     }
