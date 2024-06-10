@@ -67,7 +67,7 @@ public class MiniChunkCache {
         pos = minPos;
         MiniChunkGraph existing = cache.get(pos);
         if (existing != null) {
-            return Futures.immediateCheckedFuture(existing);
+            return Futures.immediateFuture(existing);
         }
         if (!world.isBlockLoaded(pos)) return Futures.immediateFailedFuture(new Throwable("The block " + pos + " is not loaded!"));
         synchronized (this) {

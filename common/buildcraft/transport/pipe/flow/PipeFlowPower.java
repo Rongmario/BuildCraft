@@ -89,7 +89,7 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
         pipe.getHolder().fireEvent(configure);
         isReceiver = configure.isReceiver();
         maxPower = configure.getMaxPower();
-        if (maxPower <= 0) {
+        if (maxPower < 0) {
             maxPower = DEFAULT_MAX_POWER;
         }
     }
