@@ -149,7 +149,6 @@ public class GateLogic implements IGate, IWireEmitter, IRedstoneStatementContain
                 nbt2.setByte("side", nbt.getByte(aName + ".side"));
                 nbt.setTag(aName, nbt2);
             }
-
             statements[i].trigger.readFromNbt(nbt.getCompoundTag(tName));
             statements[i].action.readFromNbt(nbt.getCompoundTag(aName));
         }
