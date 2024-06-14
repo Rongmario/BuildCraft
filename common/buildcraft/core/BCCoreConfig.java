@@ -52,6 +52,7 @@ public class BCCoreConfig {
     public static int networkUpdateRate = 10;
     public static double miningMultiplier = 1;
     public static int miningMaxDepth;
+    public static int rfPerMj = 10;
     private static Property propColourBlindMode;
     private static Property propWorldGen;
     private static Property propWorldGenWaterSpring;
@@ -147,7 +148,7 @@ public class BCCoreConfig {
 
         propRfPerMj = config.get(general, "rfPerMj", 10);
         propRfPerMj.setComment("How many rf = 1 mj");
-        propRfPerMj.setMinValue(0);
+        propRfPerMj.setMinValue(1);
         game.setTo(propRfPerMj);
 
         propUseBucketsStatic = config.get(display, "useBucketsStatic", false);
@@ -299,11 +300,14 @@ public class BCCoreConfig {
         miningMultiplier = MathUtil.clamp(propMiningMultiplier.getDouble(), 1, 200);
         miningMaxDepth = propMiningMaxDepth.getInt();
 
+
         if (EnumRestartRequirement.WORLD.hasBeenRestarted(restarted)) {
             BCLibConfig.chunkLoadingLevel =
                 ConfigUtil.parseEnumForConfig(propChunkLoadLevel, ChunkLoaderLevel.SELF_TILES);
 
             if (EnumRestartRequirement.GAME.hasBeenRestarted(restarted)) {
+                rfPerMj = propRfPerMj.getInt();
+                if (rfPerMj < 1) rfPerMj = 10;
                 worldGen = propWorldGen.getBoolean();
                 worldGenWaterSpring = propWorldGenWaterSpring.getBoolean();
                 BCLibConfig.useSwappableSprites = propUseSwappableSprites.getBoolean();

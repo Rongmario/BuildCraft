@@ -14,7 +14,9 @@ import javax.annotation.Nonnull;
 
 import buildcraft.api.mj.MjAPI;
 import buildcraft.lib.misc.data.AverageDouble;
+import buildcraft.transport.BCTransportPlugs;
 import buildcraft.transport.net.PacketPowerUpdate;
+import buildcraft.transport.plug.PluggablePowerAdaptor;
 import buildcraft.transport.tile.TilePipeHolder;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -214,10 +216,15 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
             powerAverage[o].clear();
             displayFlow[o] = 0;
         }
-        if (tile instanceof TilePipeHolder) {
+        if (tile instanceof TilePipeHolder && ((TilePipeHolder) tile).getPipe().getFlow() instanceof PipeFlowPower) {
+            //boolean f = false;
+            //TilePipeHolder holder = (TilePipeHolder) tile;
+            //if (holder.getPluggable(side.getOpposite()) != null && holder.getPluggable(side.getOpposite()).definition == BCTransportPlugs.powerAdaptor) {
+            //    if (holder.hasCapability(CapabilityEnergy.ENERGY, side.getOpposite()))
+            //}
             providers[o] = ((TilePipeHolder) tile).getPipe();
-        } else if (tile != null && tile.hasCapability(CapabilityEnergy.ENERGY, side)) {
-            providers[o] = tile.getCapability(CapabilityEnergy.ENERGY, side);
+        } else if (tile != null && tile.hasCapability(CapabilityEnergy.ENERGY, side.getOpposite())) {
+            providers[o] = tile.getCapability(CapabilityEnergy.ENERGY, side.getOpposite());
         }
     }
 
@@ -349,7 +356,10 @@ public class PipeFlowPower extends PipeFlow implements IDebuggable, IFlowPower, 
 
             Object tile = providers[dir.ordinal()];
 
-            if (tile instanceof IPipe && ((IPipe) tile).getFlow() instanceof PipeFlowPower || tile instanceof TilePipeHolder) {
+            if (tile instanceof IPipe && ((IPipe) tile).getFlow() instanceof PipeFlowPower) {
+                continue;
+            }
+            if (tile instanceof TilePipeHolder && ((TilePipeHolder) tile).getPipe().getFlow() instanceof PipeFlowPower) {
                 continue;
             }
             if (tile instanceof IEnergyStorage && !isReceiver) {

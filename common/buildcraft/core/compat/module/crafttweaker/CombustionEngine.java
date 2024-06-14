@@ -49,7 +49,7 @@ public class CombustionEngine {
         long mj = (long) (MjAPI.MJ * powerPerTick);
         CraftTweakerAPI.apply(new AddCleanFuel(fluid, mj, timePerBucket));
     }
-
+    
     @ZenMethod
     public static void addDirtyFuel(ILiquidStack lFuel, double powerPerTick, int timePerBucket, ILiquidStack lResidue) {
         FluidStack fuel = CraftTweakerMC.getLiquidStack(lFuel);
@@ -142,12 +142,4 @@ public class CombustionEngine {
             return "Adding combustion engine fuel " + fuel;
         }
     }
-
-    // static final class AddLiquidCoolant implements IAction {
-    //
-    // }
-    //
-    // static final class AddSolidCoolant implements IAction {
-    //
-    // }
 }

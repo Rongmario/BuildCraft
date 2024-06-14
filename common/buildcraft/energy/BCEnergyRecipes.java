@@ -31,8 +31,11 @@ public class BCEnergyRecipes {
         BuildcraftFuelRegistry.coolant.addSolidCoolant(new ItemStack(Blocks.PACKED_ICE),
             new FluidStack(FluidRegistry.WATER, 1000), 2f);
 
-        addFuel(BCEnergyFluids.fuel, (int) (6*MjAPI.MJ), 25000);
-        addFuel(BCEnergyFluids.oil, (int) (3*MjAPI.MJ), 12500);
+        if (!BCEnergyConfig.disableEngineRecipes) {
+            addFuel(BCEnergyFluids.fuel, (int) (6*MjAPI.MJ), 25000);
+            addFuel(BCEnergyFluids.oil, (int) (3*MjAPI.MJ), 12500);
+        }
+
 
         if (BCModules.FACTORY.isLoaded()) {
             addDistillation(new FluidStack(BCEnergyFluids.oil, 1), new FluidStack(BCEnergyFluids.fuel, 1), 12*MjAPI.MJ);

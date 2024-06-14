@@ -7,6 +7,7 @@ package buildcraft.core;
 import java.io.File;
 import java.util.function.Consumer;
 
+import buildcraft.api.mj.MjAPI;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 
@@ -77,6 +78,8 @@ public class BCCore {
         OreDictionary.registerOre("craftingTableWood", Blocks.CRAFTING_TABLE);
         MinecraftForge.EVENT_BUS.register(BCCoreEventDist.INSTANCE);
         BCCoreConfig.saveConfigs();
+        MjAPI.rfPerMj = BCCoreConfig.rfPerMj;
+        if (MjAPI.rfPerMj < 1) MjAPI.rfPerMj = 10;
     }
 
     private static void setItemTab(Item item, CreativeTabBC tab) {

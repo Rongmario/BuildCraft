@@ -46,6 +46,7 @@ public class BCEnergyConfig {
     public static double smallOilGenProb;
     public static double mediumOilGenProb;
     public static double largeOilGenProb;
+    public static boolean disableEngineRecipes;
 
     public static final TIntSet excludedDimensions = new TIntHashSet();
     /** If false then {@link #excludedDimensions} should be treated as a whitelist rather than a blacklist. */
@@ -82,6 +83,7 @@ public class BCEnergyConfig {
     private static Property propExcludedDimensions;
     private static Property propExcludedDimensionsIsBlacklist;
     private static Property propChristmasEventType;
+    private static Property propDisableEngineRecipes;
 
     public static void preInit() {
         EnumRestartRequirement world = EnumRestartRequirement.WORLD;
@@ -120,6 +122,8 @@ public class BCEnergyConfig {
         propLargeSpoutMaxHeight = BCCoreConfig.config.get("worldgen.oil.spouts", "large_max_height", 20,
             "The maximum height for large oil spouts");
 
+        propDisableEngineRecipes = BCCoreConfig.config.get("engine", "disableRecipes", false);
+
         game.setTo(propEnableOilOceanBiome);
         game.setTo(propEnableOilDesertBiome);
         game.setTo(propEnableOilGeneration);
@@ -133,6 +137,7 @@ public class BCEnergyConfig {
         game.setTo(propSmallSpoutMaxHeight);
         game.setTo(propLargeSpoutMinHeight);
         game.setTo(propLargeSpoutMaxHeight);
+        game.setTo(propDisableEngineRecipes);
 
         String[] _excessive = { //
             BCEnergy.MODID + ":oil_desert", //
@@ -236,7 +241,7 @@ public class BCEnergyConfig {
                 smallOilGenProb = propSmallOilGenProb.getDouble() / 100;
                 mediumOilGenProb = propMediumOilGenProb.getDouble() / 100;
                 largeOilGenProb = propLargeOilGenProb.getDouble() / 100;
-
+                disableEngineRecipes = propDisableEngineRecipes.getBoolean();
                 christmasEventStatus = ConfigUtil.parseEnumForConfig(propChristmasEventType, SpecialEventType.DAY_ONLY);
             } else {
                 validateBiomeNames();
