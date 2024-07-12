@@ -1,7 +1,7 @@
 [
 {
   "modid": "buildcraftlib",
-  "name": "BuildCraft Lib",
+  "name": "BuildCraft (Remastered) Lib",
   "version": "$version",
   "mcversion": "${mcversion}",
   "description": "Library mod used by buildcraft.",
@@ -18,7 +18,7 @@
 },
 {
   "modid": "buildcraftcore",
-  "name": "BuildCraft",
+  "name": "BuildCraft (Remastered)",
   "version": "$version",
   "mcversion": "${mcversion}",
   "description": "Extending Minecraft with pipes, auto-crafting, quarries, engines and much more!",
@@ -35,7 +35,7 @@
 },
 {
   "modid": "buildcraftbuilders",
-  "name": "BuildCraft Builders",
+  "name": "BuildCraft (Remastered) Builders",
   "version": "$version",
   "mcversion": "${mcversion}",
   "description": "Extending Minecraft with pipes, auto-crafting, quarries, engines and much more! (Builders Component)",
@@ -52,7 +52,7 @@
 },
 {
   "modid": "buildcraftenergy",
-  "name": "BuildCraft Energy",
+  "name": "BuildCraft (Remastered) Energy",
   "version": "$version",
   "mcversion": "${mcversion}",
   "description": "Extending Minecraft with pipes, auto-crafting, quarries, engines and much more! (Energy Component)",
@@ -69,7 +69,7 @@
 },
 {
   "modid": "buildcraftfactory",
-  "name": "BuildCraft Factory",
+  "name": "BuildCraft (Remastered) Factory",
   "version": "$version",
   "mcversion": "${mcversion}",
   "description": "Extending Minecraft with pipes, auto-crafting, quarries, engines and much more! (Factory Component)",
@@ -86,7 +86,7 @@
 },
 {
   "modid": "buildcraftsilicon",
-  "name": "BuildCraft Silicon",
+  "name": "BuildCraft (Remastered) Silicon",
   "version": "$version",
   "mcversion": "${mcversion}",
   "description": "Extending Minecraft with pipes, auto-crafting, quarries, engines and much more! (Silicon Component)",
@@ -103,7 +103,7 @@
 },
 {
   "modid": "buildcrafttransport",
-  "name": "BuildCraft Transport",
+  "name": "BuildCraft (Remastered) Transport",
   "version": "$version",
   "mcversion": "${mcversion}",
   "description": "Extending Minecraft with pipes, auto-crafting, quarries, engines and much more! (Transport Component)",
@@ -120,7 +120,7 @@
 },
 {
   "modid": "buildcraftrobotics",
-  "name": "BuildCraft Robotics",
+  "name": "BuildCraft (Remastered) Robotics",
   "version": "$version",
   "mcversion": "${mcversion}",
   "description": "Extending Minecraft with pipes, auto-crafting, quarries, engines and much more! (Robotics Component)",
