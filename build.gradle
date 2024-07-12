@@ -65,7 +65,7 @@ if (System.getenv("BUILD_VARIANT") != null) {
 
 version = config.mod_version
 group= "com.mod-buildcraft"
-archivesBaseName = "buildcraft" // the name that all artifacts will use as a base. artifacts names follow this pattern: [baseName]-[appendix]-[version]-[classifier].[extension]
+archivesBaseName = "buildcraft-remastered" // the name that all artifacts will use as a base. artifacts names follow this pattern: [baseName]-[appendix]-[version]-[classifier].[extension]
 
 ext.mcModInfo = new groovy.json.JsonSlurper().parse(file("buildcraft_resources/mcmod.info"))
 ext.priv = parseConfig(file('private.properties'))
