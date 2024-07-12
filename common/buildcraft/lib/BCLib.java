@@ -73,7 +73,7 @@ public class BCLib {
         } catch (NoSuchFieldError e) {
             throw throwBadClass(e, BCLog.class);
         }
-        BCLog.logger.info("Starting BuildCraft " + BCLib.VERSION);
+        BCLog.logger.info("Starting BuildCraft Remastered " + BCLib.VERSION);
         BCLog.logger.info("Copyright (c) the BuildCraft team, 2011-2018");
         BCLog.logger.info("https://www.mod-buildcraft.com");
         if (!GIT_COMMIT_HASH.startsWith("${")) {
