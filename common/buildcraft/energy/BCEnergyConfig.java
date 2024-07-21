@@ -46,6 +46,7 @@ public class BCEnergyConfig {
     public static double smallOilGenProb;
     public static double mediumOilGenProb;
     public static double largeOilGenProb;
+    public static double heatPerMj;
     public static boolean disableEngineRecipes;
 
     public static final TIntSet excludedDimensions = new TIntHashSet();
@@ -84,6 +85,7 @@ public class BCEnergyConfig {
     private static Property propExcludedDimensionsIsBlacklist;
     private static Property propChristmasEventType;
     private static Property propDisableEngineRecipes;
+    private static Property propHeatPerMj;
 
     public static void preInit() {
         EnumRestartRequirement world = EnumRestartRequirement.WORLD;
@@ -123,7 +125,7 @@ public class BCEnergyConfig {
             "The maximum height for large oil spouts");
 
         propDisableEngineRecipes = BCCoreConfig.config.get("engine", "disableRecipes", false);
-
+        propHeatPerMj = BCCoreConfig.config.get("engine", "heatPerMj", 0.0023);
         game.setTo(propEnableOilOceanBiome);
         game.setTo(propEnableOilDesertBiome);
         game.setTo(propEnableOilGeneration);
@@ -138,6 +140,7 @@ public class BCEnergyConfig {
         game.setTo(propLargeSpoutMinHeight);
         game.setTo(propLargeSpoutMaxHeight);
         game.setTo(propDisableEngineRecipes);
+        game.setTo(propHeatPerMj);
 
         String[] _excessive = { //
             BCEnergy.MODID + ":oil_desert", //
@@ -238,6 +241,7 @@ public class BCEnergyConfig {
                 largeSpoutMinHeight = propLargeSpoutMinHeight.getInt();
                 largeSpoutMaxHeight = propLargeSpoutMaxHeight.getInt();
 
+                heatPerMj = propHeatPerMj.getDouble();
                 smallOilGenProb = propSmallOilGenProb.getDouble() / 100;
                 mediumOilGenProb = propMediumOilGenProb.getDouble() / 100;
                 largeOilGenProb = propLargeOilGenProb.getDouble() / 100;

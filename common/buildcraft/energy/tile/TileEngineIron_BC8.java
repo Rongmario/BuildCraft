@@ -10,6 +10,7 @@ import java.io.IOException;
 
 import javax.annotation.Nonnull;
 
+import buildcraft.energy.BCEnergyConfig;
 import buildcraft.energy.BCEnergyFluids;
 import buildcraft.lib.fluid.FluidManager;
 import buildcraft.lib.tile.item.ItemHandlerManager;
@@ -272,7 +273,7 @@ public class TileEngineIron_BC8 extends TileEngineBase_BC8 {
                     }
                     currentOutput = currentFuel.getPowerPerCycle(); // Comment out for constant power
                     addPower(currentFuel.getPowerPerCycle());
-                    heat += currentFuel.getPowerPerCycle() * HEAT_PER_MJ / MjAPI.MJ;// * getBiomeTempScalar();
+                    heat += currentFuel.getPowerPerCycle() * BCEnergyConfig.heatPerMj / MjAPI.MJ;// * getBiomeTempScalar();
                 }
             } else if (lastPowered) {
                 lastPowered = false;

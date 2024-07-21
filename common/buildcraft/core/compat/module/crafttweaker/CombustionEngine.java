@@ -1,5 +1,6 @@
 package buildcraft.core.compat.module.crafttweaker;
 
+import buildcraft.energy.BCEnergyConfig;
 import net.minecraftforge.fluids.FluidStack;
 
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
@@ -20,7 +21,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 public class CombustionEngine {
 
     private static final double MAX_POWER
-        = (TileEngineBase_BC8.MAX_HEAT - TileEngineBase_BC8.MIN_HEAT) / TileEngineBase_BC8.HEAT_PER_MJ;
+        = (TileEngineBase_BC8.MAX_HEAT - TileEngineBase_BC8.MIN_HEAT) / BCEnergyConfig.heatPerMj;
 
     @ZenMethod
     public static void addCleanFuel(ILiquidStack liquid, double powerPerTick, int timePerBucket) {
@@ -28,9 +29,9 @@ public class CombustionEngine {
         if (fluid == null) {
             throw new IllegalArgumentException("Fluid was null!");
         }
-        if (BuildcraftFuelRegistry.fuel.getFuel(fluid) != null) {
-            throw new IllegalArgumentException("The fluid " + fluid + " is already registered as a fuel!");
-        }
+        //if (BuildcraftFuelRegistry.fuel.getFuel(fluid) != null) {
+        //    throw new IllegalArgumentException("The fluid " + fluid + " is already registered as a fuel!");
+        //}
         if (BuildcraftFuelRegistry.coolant.getCoolant(fluid) != null) {
             throw new IllegalArgumentException(
                 "The fluid " + fluid
@@ -60,9 +61,9 @@ public class CombustionEngine {
         if (residue.getFluid() == null) {
             throw new IllegalArgumentException("Residue fluid was null!");
         }
-        if (BuildcraftFuelRegistry.fuel.getFuel(fuel) != null) {
-            throw new IllegalArgumentException("The fluid " + fuel + " is already registered as a fuel!");
-        }
+        //if (BuildcraftFuelRegistry.fuel.getFuel(fuel) != null) {
+        //    throw new IllegalArgumentException("The fluid " + fuel + " is already registered as a fuel!");
+        //}
         if (BuildcraftFuelRegistry.coolant.getCoolant(fuel) != null) {
             throw new IllegalArgumentException(
                 "The fluid " + fuel

@@ -28,12 +28,24 @@ public enum FuelRegistry implements IFuelManager {
 
     @Override
     public IFuel addFuel(FluidStack fluid, long powerPerCycle, int totalBurningTime) {
-        return addFuel(new Fuel(fluid, powerPerCycle, totalBurningTime));
+        IFuel f = null;
+        for (IFuel fuel : fuels) {
+            if (fuel.getFluid().isFluidEqual(fluid)) f = fuel;
+        }
+        if (f == null) {
+            return addFuel(new Fuel(fluid, powerPerCycle, totalBurningTime));
+        } else {
+            if (f.getPowerPerCycle() > powerPerCycle) return f;
+            else {
+                fuels.remove(f);
+                return addFuel(new Fuel(fluid, powerPerCycle, totalBurningTime));
+            }
+        }
     }
 
     @Override
     public IDirtyFuel addDirtyFuel(FluidStack fuel, long powerPerCycle, int totalBurningTime, FluidStack residue) {
-        return addFuel(new DirtyFuel(fuel, powerPerCycle, totalBurningTime, residue));
+        return new DirtyFuel(addFuel(fuel, powerPerCycle, totalBurningTime));
     }
 
     @Override
@@ -88,6 +100,10 @@ public enum FuelRegistry implements IFuelManager {
         public DirtyFuel(FluidStack fluid, long powerPerCycle, int totalBurningTime, FluidStack residue) {
             super(fluid, powerPerCycle, totalBurningTime);
             this.residue = residue;
+        }
+
+        public DirtyFuel(IFuel f) {
+            this(f.getFluid(), f.getPowerPerCycle(), f.getTotalBurningTime(), new FluidStack(f.getFluid(), 0));
         }
 
         @Override

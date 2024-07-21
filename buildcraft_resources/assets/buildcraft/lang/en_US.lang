@@ -676,6 +676,8 @@ tile.architect.tooltip.allowCreative.2=Survival ignores all unsupported blocks
 tile.architect.excavate=Excavate: On
 tile.architect.noexcavate=Excavate: Off
 
+tile.tubeBlock.name=Mining Tube
+
 tip.gate.wires=§9§oCompatible Wires:
 tip.gate.wires.redstone=Red
 tip.gate.wires.iron=Red, Blue
