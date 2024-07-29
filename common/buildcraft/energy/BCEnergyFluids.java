@@ -23,6 +23,17 @@ public class BCEnergyFluids {
     public static BCFluid fuel;
 
 
+    public static BCFluid[] crudeOil = new BCFluid[1]; // these arrays are for mod (TR) compat
+    public static BCFluid[] oilDense = {};
+    public static BCFluid[] oilDistilled = {};
+    public static BCFluid[] oilHeavy = {};
+    public static BCFluid[] fuelDense = {};
+    public static BCFluid[] fuelLight = new BCFluid[1];
+    public static BCFluid[] fuelMixedHeavy = {};
+    public static BCFluid[] fuelMixedLight = {};
+    public static BCFluid[] fuelGaseous = {};
+    public static BCFluid[] oilResidue = {};
+
     public static final List<BCFluid> allFluids = new ArrayList<>();
 
     public static void preInit() {
@@ -35,7 +46,9 @@ public class BCEnergyFluids {
         };//@formatter:on
         if (BCModules.FACTORY.isLoaded()) {
             oil = defineFluid(data[0], "oil");
+            crudeOil[0] = oil;
             fuel = defineFluid(data[1], "fuel");
+            fuelLight[0] = fuel;
         }
     }
 
