@@ -1,4 +1,4 @@
-package buildcraft.core.compat.module.ic2;
+package buildcraft.core.compat.module.ic2.exp;
 
 import buildcraft.api.statements.IStatement;
 import buildcraft.api.statements.IStatementContainer;
@@ -22,12 +22,12 @@ import net.minecraft.util.EnumFacing;
 import java.lang.reflect.Field;
 import java.util.List;
 
-public class TriggerPowerItem extends BCStatement implements ITriggerExternal {
+public class ExpTriggerPowerItem extends BCStatement implements ITriggerExternal {
     private final boolean charging;
     private final int id;
     // 0 - full/empty, 1 - low, 2 - high
 
-    public TriggerPowerItem(boolean charging, int id) {
+    public ExpTriggerPowerItem(boolean charging, int id) {
         super("buildcraft:eu" + (charging ? "Charge" : "Discharge")+id);
         this.charging = charging;
         this.id = id;
@@ -134,6 +134,6 @@ public class TriggerPowerItem extends BCStatement implements ITriggerExternal {
 
     @Override
     public IStatement[] getPossible() {
-        return charging ? IC2Statements.CHARGE_ITEM : IC2Statements.DISCHARGE_ITEM;
+        return charging ? ExpIC2Statements.CHARGE_ITEM : ExpIC2Statements.DISCHARGE_ITEM;
     }
 }

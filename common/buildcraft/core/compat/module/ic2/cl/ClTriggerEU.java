@@ -1,19 +1,18 @@
-package buildcraft.core.compat.module.ic2;
+package buildcraft.core.compat.module.ic2.cl;
 
 import buildcraft.api.statements.*;
 import buildcraft.core.BCCoreSprites;
 import buildcraft.core.statements.BCStatement;
 import buildcraft.lib.client.sprite.SpriteHolderRegistry;
 import buildcraft.lib.misc.LocaleUtil;
-import ic2.core.block.TileEntityBlock;
-import ic2.core.block.comp.Energy;
+import ic2.api.classic.tile.machine.IEUStorage;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
-public class TriggerEU extends BCStatement implements ITriggerExternal {
+public class ClTriggerEU extends BCStatement implements ITriggerExternal {
     private final boolean high;
 
-    public TriggerEU(boolean high) {
+    public ClTriggerEU(boolean high) {
         super("buildcraft:energyStoredEU" + (high ? "high" : "low"));
         this.high = high;
     }
@@ -28,29 +27,27 @@ public class TriggerEU extends BCStatement implements ITriggerExternal {
         return LocaleUtil.localize("gate.trigger.machine.energyStored." + (high ? "high" : "low"));
     }
 
-    private static Energy getEnergy(TileEntity tile) {
-        if (tile instanceof TileEntityBlock) {
-            if (((TileEntityBlock) tile).hasComponent(Energy.class)) {
-                return ((TileEntityBlock) tile).getComponent(Energy.class);
-            }
+    private static IEUStorage getEnergy(TileEntity tile) {
+        if (tile instanceof IEUStorage) {
+            return (IEUStorage) tile;
         }
         return null;
     }
 
     public static boolean isTriggeringTile(TileEntity tile) {
-        Energy energy = getEnergy(tile);
+        IEUStorage energy = getEnergy(tile);
         if (energy != null) {
-            return energy.getCapacity() > 0;
+            return energy.getMaxEU() > 0;
         }
         return false;
     }
 
     @Override
     public boolean isTriggerActive(TileEntity target, EnumFacing side, IStatementContainer source, IStatementParameter[] parameters) {
-        Energy energy = getEnergy(target);
+        IEUStorage energy = getEnergy(target);
         if (energy != null) {
-            double stored = energy.getEnergy();
-            double max = energy.getCapacity();
+            double stored = energy.getStoredEU();
+            double max = energy.getMaxEU();
             if (max > 0) {
                 double level = stored / max;
                 if (high) {
@@ -65,6 +62,6 @@ public class TriggerEU extends BCStatement implements ITriggerExternal {
 
     @Override
     public IStatement[] getPossible() {
-        return IC2Statements.TRIGGER_EU;
+        return ClIC2Statements.TRIGGER_EU;
     }
 }

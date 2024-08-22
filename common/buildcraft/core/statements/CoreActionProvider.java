@@ -10,7 +10,8 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 
-import buildcraft.core.compat.module.ic2.IC2Statements;
+import buildcraft.core.compat.module.ic2.IC2VersionHelper;
+import buildcraft.core.compat.module.ic2.exp.ExpIC2Statements;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
@@ -42,7 +43,7 @@ public enum CoreActionProvider implements IActionProvider {
     @Override
     public void addExternalActions(Collection<IActionExternal> res, @Nonnull EnumFacing side, TileEntity tile) {
         if (Loader.isModLoaded("ic2")) {
-            IC2Statements.addActions(res, side, tile);
+            IC2VersionHelper.addExternalActions(res, side, tile);
         }
         IControllable controllable = tile.getCapability(TilesAPI.CAP_CONTROLLABLE, side.getOpposite());
         if (controllable != null) {

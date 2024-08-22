@@ -118,6 +118,7 @@ dependencies {
 
     deobfCompile "CraftTweaker2:CraftTweaker2-API:${config.crafttweaker_version}"
     deobfCompile "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-${config.crafttweaker_version}"
+    deobfCompile "curse.maven:ic2-classic-242942:5554368"
 }
 
 minecraft {

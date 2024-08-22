@@ -1,4 +1,4 @@
-package buildcraft.core.compat.module.ic2;
+package buildcraft.core.compat.module.ic2.exp;
 
 import buildcraft.api.statements.IActionExternal;
 import buildcraft.api.statements.IStatement;
@@ -17,10 +17,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ActionSetRedstoneMode extends BCStatement implements IActionExternal {
+public class ExpActionSetRedstoneMode extends BCStatement implements IActionExternal {
     private final byte mode;
 
-    public ActionSetRedstoneMode(byte mode) {
+    public ExpActionSetRedstoneMode(byte mode) {
         super("rs."+mode);
         this.mode = mode;
     }
@@ -59,6 +59,6 @@ public class ActionSetRedstoneMode extends BCStatement implements IActionExterna
 
     @Override
     public IStatement[] getPossible() {
-        return IC2Statements.REDSTONE_MODE;
+        return ExpIC2Statements.REDSTONE_MODE;
     }
 }

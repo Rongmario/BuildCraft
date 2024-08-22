@@ -185,7 +185,10 @@ public class TileAssemblyTable extends TileLaserTableBase {
             AdvancementUtil.unlockAdvancement(getOwner().getId(), ADVANCEMENT);
             if (power >= lastTarget) {
                 AssemblyInstruction instruction = getActiveRecipe();
-                extract(inv, instruction.recipe.getInputsFor(instruction.output), false, false);
+                try {
+                    extract(inv, instruction.recipe.getInputsFor(instruction.output), false, false);
+
+                } catch (Exception ignored) {}
 
                 InventoryUtil.addToBestAcceptor(getWorld(), getPos(), null, instruction.output.copy());
 

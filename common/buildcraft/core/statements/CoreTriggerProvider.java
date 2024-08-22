@@ -10,7 +10,8 @@ import java.util.Collection;
 
 import javax.annotation.Nonnull;
 
-import buildcraft.core.compat.module.ic2.IC2Statements;
+import buildcraft.core.compat.module.ic2.IC2VersionHelper;
+import buildcraft.core.compat.module.ic2.exp.ExpIC2Statements;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
@@ -56,7 +57,7 @@ public enum CoreTriggerProvider implements ITriggerProvider {
     public void addExternalTriggers(Collection<ITriggerExternal> res, @Nonnull EnumFacing side, TileEntity tile) {
 
         if (Loader.isModLoaded("ic2")) {
-            IC2Statements.addTriggers(res, side, tile);
+            IC2VersionHelper.addExternalTriggers(res, side, tile);
         }
 
         if (TriggerPower.isTriggeringTile(tile, side.getOpposite())) {
