@@ -124,8 +124,8 @@ public class BCEnergyConfig {
         propLargeSpoutMaxHeight = BCCoreConfig.config.get("worldgen.oil.spouts", "large_max_height", 20,
             "The maximum height for large oil spouts");
 
-        propDisableEngineRecipes = BCCoreConfig.config.get("engine", "disableRecipes", false);
-        propHeatPerMj = BCCoreConfig.config.get("engine", "heatPerMj", 0.0023);
+        propDisableEngineRecipes = BCCoreConfig.config.get("engine", "disableRecipes", false, "Setting this to true removes combustion engine recipes");
+        propHeatPerMj = BCCoreConfig.config.get("engine", "heatPerMj", 0.0023, "How much heat should be generated in engines");
         game.setTo(propEnableOilOceanBiome);
         game.setTo(propEnableOilDesertBiome);
         game.setTo(propEnableOilGeneration);

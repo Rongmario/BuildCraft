@@ -53,6 +53,7 @@ public class BCCoreConfig {
     public static double miningMultiplier = 1;
     public static int miningMaxDepth;
     public static int rfPerMj = 10;
+    public static int autoWorkbenchMaxRFT = 40;
     private static Property propColourBlindMode;
     private static Property propWorldGen;
     private static Property propWorldGenWaterSpring;
@@ -80,6 +81,7 @@ public class BCCoreConfig {
     private static Property propNetworkUpdateRate;
     private static Property propMiningMultiplier;
     private static Property propMiningMaxDepth;
+    private static Property propAutoWorkbenchMaxRFT;
 
     public static void preInit(File cfgFolder) {
         configFolder = cfgFolder;
@@ -239,6 +241,11 @@ public class BCCoreConfig {
             + "\n(Note: values above 256 only have an effect if a mod like cubic chunks is installed).");
         none.setTo(propMiningMaxDepth);
 
+        propAutoWorkbenchMaxRFT = config.get(general, "autoWorkbenchMaxRfT", 40);
+        propAutoWorkbenchMaxRFT.setMinValue(1).setMaxValue(400);
+        propAutoWorkbenchMaxRFT.setComment("How much power in rf/t can the auto workbench receive");
+        game.setTo(propAutoWorkbenchMaxRFT);
+
         reloadConfig(game);
         addReloadListener(BCCoreConfig::reloadConfig);
 
@@ -311,6 +318,7 @@ public class BCCoreConfig {
                 worldGen = propWorldGen.getBoolean();
                 worldGenWaterSpring = propWorldGenWaterSpring.getBoolean();
                 BCLibConfig.useSwappableSprites = propUseSwappableSprites.getBoolean();
+                autoWorkbenchMaxRFT = propAutoWorkbenchMaxRFT.getInt();
             }
         }
         BCLibConfig.refreshConfigs();

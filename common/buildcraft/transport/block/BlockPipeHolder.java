@@ -104,7 +104,7 @@ public class BlockPipeHolder extends BlockBCTile_Neptune implements ICustomPaint
     public BlockPipeHolder(Material material, String id) {
         super(material, id);
 
-        setHardness(0.25f);
+        setHardness(0.8f);
         setResistance(3.0f);
         setLightOpacity(0);
     }

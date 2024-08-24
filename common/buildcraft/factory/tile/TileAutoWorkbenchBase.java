@@ -11,12 +11,17 @@ import java.util.Arrays;
 
 import javax.annotation.Nonnull;
 
+import buildcraft.core.BCCoreConfig;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -41,7 +46,7 @@ import buildcraft.lib.tile.item.ItemHandlerManager.EnumAccess;
 import buildcraft.lib.tile.item.ItemHandlerSimple;
 
 public abstract class TileAutoWorkbenchBase extends TileBC_Neptune
-    implements ITickable, IHasWork, IMjRedstoneReceiver, IAutoCraft {
+    implements ITickable, IHasWork, IMjRedstoneReceiver, IAutoCraft, IEnergyStorage {
 
     /** A redstone engine generates <code> 1 * {@link MjAPI#MJ}</code> per tick. This makes it a lot slower without one
      * powering it. */
@@ -245,6 +250,11 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune
         return microJoules - taken;
     }
 
+    @Override
+    public boolean canReceive() {
+        return IMjRedstoneReceiver.super.canReceive();
+    }
+
     // IAutoCraft
 
     @Override
@@ -255,5 +265,50 @@ public abstract class TileAutoWorkbenchBase extends TileBC_Neptune
     @Override
     public ItemHandlerSimple getInvBlueprint() {
         return invBlueprint;
+    }
+
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate) {
+        int rfRequested = (int) (getPowerRequested() * MjAPI.rfPerMj / MjAPI.MJ);
+        int taken = Math.min(rfRequested, maxReceive);
+        taken = Math.min(taken, BCCoreConfig.autoWorkbenchMaxRFT);
+        if (!simulate) {
+            powerStored += taken * MjAPI.MJ / MjAPI.rfPerMj;
+        }
+        return taken;
+    }
+
+    @Override
+    public int extractEnergy(int maxExtract, boolean simulate) {
+        return 0;
+    }
+
+    @Override
+    public int getEnergyStored() {
+        return (int) (powerStored * MjAPI.rfPerMj / MjAPI.MJ);
+    }
+
+    @Override
+    public int getMaxEnergyStored() {
+        return (int) (POWER_REQUIRED * MjAPI.rfPerMj / MjAPI.MJ);
+    }
+
+    @Override
+    public boolean canExtract() {
+        return false;
+    }
+
+    @Override
+    public boolean hasCapability(@Nonnull Capability<?> capability, EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY) return true;
+        return super.hasCapability(capability, facing);
+    }
+
+    @Override
+    public <T> T getCapability(@Nonnull Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityEnergy.ENERGY) {
+            return CapabilityEnergy.ENERGY.cast(this);
+        }
+        return super.getCapability(capability, facing);
     }
 }
